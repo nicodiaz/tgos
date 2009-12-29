@@ -37,6 +37,7 @@ public class Lesson4 extends SimplePhysicsGame
 		StaticPhysicsNode staticNode = getPhysicsSpace().createStaticNode();
 		rootNode.attachChild(staticNode);
 		PhysicsBox floorBox = staticNode.createBox("floor");
+		floorBox.getLocalRotation().fromAngleNormalAxis(0.3F, new Vector3f(0,0,1));
 		floorBox.getLocalScale().set(10, 0.5f, 10);
 
 		/*
@@ -55,11 +56,12 @@ public class Lesson4 extends SimplePhysicsGame
 		 * a ejecutar cada vez que se presiona la tecla.
 		 */
 		input.addAction(new MyInputAction(), InputHandler.DEVICE_KEYBOARD, KeyInput.KEY_HOME,
-			InputHandler.AXIS_NONE, true);
+			InputHandler.AXIS_NONE, false);
 
 		/*
 		 * Empezamos pausado para poder ver bien ;)
 		 */
+		showPhysics = true;
 		pause = true;
 	}
 
@@ -78,7 +80,7 @@ public class Lesson4 extends SimplePhysicsGame
 			 * Atencion, que las fuerzas se acumulan con cada step!! Ver la
 			 * proxima seccion para evitar esto.
 			 */
-			dynamicNode.addForce(new Vector3f(2, 0, 0));
+			dynamicNode.addForce(new Vector3f(50, 0, 0));
 		}
 
 	}
