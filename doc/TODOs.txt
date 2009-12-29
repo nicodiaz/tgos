@@ -1,0 +1,5 @@
+TODOs y TIPS
+
+Recordar en el deploy de los binarios, copiar todas las librerias nativas 
+(las de jme + las de jmonkey + demas) bajo lib/linux y lib/windows. De esta
+forma se puede hacer facilmente un .sh o un .bat solo añadiendo -Dlib/...

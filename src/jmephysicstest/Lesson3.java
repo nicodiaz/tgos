@@ -28,12 +28,16 @@ public class Lesson3 extends SimplePhysicsGame
 	{
 		/*
 		 * Creamos el mismo piso de las lecciones 1 y 2. Pero lo rotamos con la
-		 * ultima instruccion
+		 * ultima instruccion, para hacer un plano inclinado.
 		 */
 		StaticPhysicsNode staticNode = getPhysicsSpace().createStaticNode();
 		rootNode.attachChild(staticNode);
 		final Box visualFloorBox = new Box("floor", new Vector3f(), 5, 0.25f, 5);
 		staticNode.attachChild(visualFloorBox);
+		/*
+		 * El 0.3 es el angulo de inclinacion y el {0,0,-1} quiere decir que lo
+		 * rotas en el eje z (hacia la derecha)
+		 */
 		visualFloorBox.getLocalRotation().fromAngleNormalAxis(0.3f, new Vector3f(0, 0, -1));
 
 		/*
@@ -70,28 +74,29 @@ public class Lesson3 extends SimplePhysicsGame
 		 * Lo trasladamos.
 		 */
 		iceQube.getLocalTranslation().set(0, 5, 1.5f);
-		
+
 		/*
-		 * IMPORTANTE PARA EL TP: Se puede predefinir los materiales propios, con el correspondiente mu, 
-		 * densidad, etc. VER ESTO EN EL EJEMPLO COMPLETO.
+		 * IMPORTANTE PARA EL TP: Se puede predefinir los materiales propios,
+		 * con el correspondiente mu, densidad, etc. VER ESTO EN EL EJEMPLO
+		 * COMPLETO.
 		 */
-        final Material customMaterial = new Material( "supra-stopper" );
-        customMaterial.setDensity( 0.05f );
-        MutableContactInfo contactDetails = new MutableContactInfo();
-        contactDetails.setBounce( 0 );
-        contactDetails.setMu( 1000 ); // todo: Float.POSITIVE_INFINITY ROMPE LINUX
-        customMaterial.putContactHandlingDetails( Material.DEFAULT, contactDetails );
+		final Material customMaterial = new Material("supra-stopper");
+		customMaterial.setDensity(0.05f);
+		MutableContactInfo contactDetails = new MutableContactInfo();
+		contactDetails.setBounce(0);
+		contactDetails.setMu(1000); // todo: Float.POSITIVE_INFINITY ROMPE LINUX
+		customMaterial.putContactHandlingDetails(Material.DEFAULT, contactDetails);
 
-        final DynamicPhysicsNode stopper = createBox();
-        stopper.setMaterial( customMaterial );
-        stopper.computeMass();
-        color( stopper, new ColorRGBA( 1, 0, 0, 1 ) );
-        stopper.getLocalTranslation().set( 0, 5, 3 );
+		final DynamicPhysicsNode stopper = createBox();
+		stopper.setMaterial(customMaterial);
+		stopper.computeMass();
+		color(stopper, new ColorRGBA(1, 0, 0, 1));
+		stopper.getLocalTranslation().set(0, 5, 3);
 
-        /*
-         * Empezamos pausado para poder ver bien ;)
-         */
-        pause = true;
+		/*
+		 * Empezamos pausado para poder ver bien ;)
+		 */
+		pause = true;
 	}
 
 	/**
