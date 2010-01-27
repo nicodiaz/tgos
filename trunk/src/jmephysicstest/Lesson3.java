@@ -41,10 +41,9 @@ public class Lesson3 extends SimplePhysicsGame
 		visualFloorBox.getLocalRotation().fromAngleNormalAxis(0.3f, new Vector3f(0, 0, -1));
 
 		/*
-		 * Creamos otra box para el piso. MUY IMPORTANTE: Si bien tenemos que
-		 * crear tantos dynamic Node como objetos que interactuen sea necesario
-		 * pero SOLO es necesario UN SOLO STATIC NODE, aunque hayan varios
-		 * objetos statics.
+		 * Creamos otra box para el piso. MUY IMPORTANTE: tenemos que crear
+		 * tantos dynamic Node como objetos que interactuen sea necesario. En este caso lo hacemos
+		 * mediante una funcion.
 		 */
 		final Box visualFloorBox2 = new Box("floor", new Vector3f(), 5, 0.25f, 5);
 		staticNode.attachChild(visualFloorBox2);

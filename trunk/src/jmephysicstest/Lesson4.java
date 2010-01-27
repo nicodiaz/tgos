@@ -32,7 +32,7 @@ public class Lesson4 extends SimplePhysicsGame
 	{
 		/*
 		 * Creamos un piso de las lecciones 1 y 2. OJO: Ponemos los valores y NO
-		 * un new Vecto3f ya que sino lo estaría creando con cata iteracion (?)
+		 * un new Vecto3f ya que sino lo estaría creando con cada iteracion (?)
 		 */
 		StaticPhysicsNode staticNode = getPhysicsSpace().createStaticNode();
 		rootNode.attachChild(staticNode);
