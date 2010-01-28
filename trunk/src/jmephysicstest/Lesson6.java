@@ -27,9 +27,8 @@ public class Lesson6 extends Lesson5
 	protected void simpleInitGame()
 	{
 		/*
-		 * Heredamos todo lo hecho hasta el momento en la lesson 5. Eso incluye
-		 * el piso, la esfera suspendida y los inputhandlers de las teclas HOME
-		 * y END.
+		 * Heredamos todo lo hecho hasta el momento en la lesson 5. Eso incluye el piso,
+		 * la esfera suspendida y los inputhandlers de las teclas HOME y END.
 		 */
 		super.simpleInitGame();
 
@@ -46,9 +45,9 @@ public class Lesson6 extends Lesson5
 		sphereNode.getLocalTranslation().set(5, 5, 0);
 
 		/*
-		 * La idea ahora es tomar el handler cuando un objeto colisiona con el
-		 * piso. La idea es aplicar la accion que queramos cada vez que se
-		 * produce una colision con el piso inferior.
+		 * La idea ahora es tomar el handler cuando un objeto colisiona con el piso. La
+		 * idea es aplicar la accion que queramos cada vez que se produce una colision con
+		 * el piso inferior.
 		 */
 		final SyntheticButton collisionEventHandler = lowerFloor.getCollisionEventHandler();
 
@@ -64,15 +63,15 @@ public class Lesson6 extends Lesson5
 		{
 
 			/*
-			 * Mediante esta forma obtenemos toda la información de la colisión,
-			 * como por ejemplo, los datos del objeto que colisionó.
+			 * Mediante esta forma obtenemos toda la información de la colisión, como por
+			 * ejemplo, los datos del objeto que colisionó.
 			 */
 			final ContactInfo contactInfo = ((ContactInfo) evt.getTriggerData());
 
 			/*
-			 * sin embargo, el orden de la colision no esta determinado!!! Entonces puede ser, en
-			 * nodo 1 el piso y en nodo 2 la esfera o al reves. Para eso, tenemos que validarlo
-			 * de la siguiente manera:
+			 * sin embargo, el orden de la colision no esta determinado!!! Entonces puede
+			 * ser, en nodo 1 el piso y en nodo 2 la esfera o al reves. Para eso, tenemos
+			 * que validarlo de la siguiente manera:
 			 */
 			DynamicPhysicsNode sphere = null;
 			if (contactInfo.getNode2() instanceof DynamicPhysicsNode)
@@ -87,10 +86,10 @@ public class Lesson6 extends Lesson5
 				// Es al revés!!
 				sphere = (DynamicPhysicsNode) contactInfo.getNode1();
 			}
-			
-            // Devolvemos el objeto que impacto al punto (0,5,0)
-            sphere.clearDynamics();
-            sphere.getLocalTranslation().set( 0, 5, 0 );
+
+			// Devolvemos el objeto que impacto al punto (0,5,0)
+			sphere.clearDynamics();
+			sphere.getLocalTranslation().set(0, 5, 0);
 		}
 
 	}
