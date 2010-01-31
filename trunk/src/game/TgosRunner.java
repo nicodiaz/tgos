@@ -1,6 +1,6 @@
 package game;
 
-import game.main.TgosMain;
+import game.core.TgosMain;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
