@@ -1,4 +1,4 @@
-package game.main;
+package game.core;
 
 import game.elements.RoomFactory;
 
