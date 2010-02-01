@@ -1,10 +1,9 @@
 package game.elements;
 
-import java.util.List;
-
 import game.core.ModelLoader;
 
-import com.jme.bounding.BoundingBox;
+import java.util.List;
+
 import com.jme.math.Vector3f;
 import com.jme.scene.Node;
 import com.jme.scene.Spatial;
@@ -25,6 +24,7 @@ public class Sapo
 		 */
 		Node sapoTopNode = null;
 		sapoTopNode = (Node) ModelLoader.load3ds("models/test6.3ds");
+		
 		sapoStaticNode.getLocalTranslation().set(new Vector3f(-8f, -100f, -300f));
 		sapoStaticNode.getLocalScale().set(0.04f, 0.04f, 0.04f);
 		sapoStaticNode.getLocalRotation().fromAngleNormalAxis(-(float) Math.PI / 2.0f,
@@ -40,8 +40,8 @@ public class Sapo
 		
 		
 		// Set the properties of the bounding volume, require for the update
-		rootNode.setModelBound(new BoundingBox());
-		rootNode.updateModelBound();
+//		rootNode.setModelBound(new BoundingBox());
+//		rootNode.updateModelBound();
 
 		// And finally, generate the require physics
 		sapoStaticNode.generatePhysicsGeometry();
