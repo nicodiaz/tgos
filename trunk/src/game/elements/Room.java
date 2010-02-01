@@ -38,32 +38,33 @@ public class Room
 		room = theSpace.createStaticNode();
 		rootNode.attachChild(room);
 		
-//		//Now we use the boxes of JME, that are trimeshes. We start with the front Wall. 
-//		final Box frontWallBox = new Box("frontWall", new Vector3f(0, 0, -FAR), SIZEFACTOR, SIZEFACTOR, THICK);
-//		room.attachChild(frontWallBox);
-//
-//		// The floor
-//		final Box floorBox = new Box("floor", new Vector3f(0, -SIZEFACTOR, 0), SIZEFACTOR, THICK, FAR);
-//		room.attachChild(floorBox);
-//
-//		// The roof
-//		final Box roofBox = new Box("roof", new Vector3f(0, SIZEFACTOR, 0), SIZEFACTOR, THICK, FAR);
-//		room.attachChild(roofBox);
-//		
-//		// The right wall
-//		final Box rightWallBox = new Box("rightWall", new Vector3f(SIZEFACTOR, 0, 0), THICK, SIZEFACTOR, FAR);
-//		room.attachChild(rightWallBox);
-//		
-//		// The left wall
-//		final Box leftWallBox = new Box("leftWall", new Vector3f(-SIZEFACTOR, 0, 0), THICK, SIZEFACTOR, FAR);
-//		room.attachChild(leftWallBox);
-		
 		this.SIZEFACTOR = size;
 		this.THICK = thick;
 		this.FAR = far;
 		
-		final Box roomBox = new Box("room", new Vector3f(0, 0, 0), SIZEFACTOR, SIZEFACTOR, FAR);
-		room.attachChild(roomBox);
+//		//Now we use the boxes of JME, that are trimeshes. We start with the front Wall. 
+		final Box frontWallBox = new Box("frontWall", new Vector3f(0, 0, -FAR), SIZEFACTOR, SIZEFACTOR, THICK);
+		room.attachChild(frontWallBox);
+//
+//		// The floor
+		final Box floorBox = new Box("floor", new Vector3f(0, -SIZEFACTOR, 0), SIZEFACTOR, THICK, FAR);
+		room.attachChild(floorBox);
+//
+//		// The roof
+		final Box roofBox = new Box("roof", new Vector3f(0, SIZEFACTOR, 0), SIZEFACTOR, THICK, FAR);
+		room.attachChild(roofBox);
+//		
+//		// The right wall
+		final Box rightWallBox = new Box("rightWall", new Vector3f(SIZEFACTOR, 0, 0), THICK, SIZEFACTOR, FAR);
+		room.attachChild(rightWallBox);
+//		
+//		// The left wall
+		final Box leftWallBox = new Box("leftWall", new Vector3f(-SIZEFACTOR, 0, 0), THICK, SIZEFACTOR, FAR);
+		room.attachChild(leftWallBox);
+		
+		// ESTAS 2 LINEAS SI ME HA TRAIDO PROBLEMAS EHHHHHHHHHHHH LPM!!!!!!!
+//		final Box roomBox = new Box("room", new Vector3f(0, 0, 0), SIZEFACTOR, SIZEFACTOR, FAR);
+//		room.attachChild(roomBox);
 		
 		room.generatePhysicsGeometry();
 	}
