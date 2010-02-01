@@ -1,6 +1,7 @@
 package game.core;
 
-import game.elements.RoomFactory;
+import game.elements.Room;
+import game.elements.Sapo;
 
 import com.jmex.physics.util.SimplePhysicsGame;
 
@@ -11,7 +12,10 @@ public class TgosMain extends SimplePhysicsGame
 	protected void simpleInitGame()
 	{
 		// We start creating the room
-		RoomFactory roomFactory = new RoomFactory(getPhysicsSpace(), rootNode);
+		Room room = new Room(getPhysicsSpace(), rootNode);
+		
+		Sapo sapo = new Sapo(getPhysicsSpace(), rootNode);
+		
 		
 	}
 	
