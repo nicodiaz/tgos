@@ -14,7 +14,7 @@ import com.jmex.physics.StaticPhysicsNode;
  * @author Hari
  *
  */
-public class RoomFactory
+public class Room
 {
 	private StaticPhysicsNode room = null;
 	
@@ -28,12 +28,12 @@ public class RoomFactory
 	private Float FAR = 80.0f;
 	
 	
-	public RoomFactory(PhysicsSpace theSpace, Node rootNode)
+	public Room(PhysicsSpace theSpace, Node rootNode)
 	{
-		this(theSpace, rootNode, 20.0f, 1.5f, 80.0f);
+		this(theSpace, rootNode, 100.0f, 1.5f, 400.0f);
 	}
 	
-	public RoomFactory(PhysicsSpace theSpace, Node rootNode, float size, float thick, float far)
+	public Room(PhysicsSpace theSpace, Node rootNode, float size, float thick, float far)
 	{
 		room = theSpace.createStaticNode();
 		rootNode.attachChild(room);
