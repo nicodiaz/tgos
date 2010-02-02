@@ -78,11 +78,30 @@ public class Sapo
 			(sapoBack - sapoFront) / 2.0f);
 		sapoStaticNode.attachChild(floorSapoWall);
 
-		// TODO:Only for DEBUG. Modify later -> makeBoxes();
-		// front wall.
-		// final Box frontSapoWall = new Box("frontSapoWall", new Vector3f(0, 0,
-		// -sapoFront), sapoWidth, sapoHeight, sapoThick / 10);
-		// sapoStaticNode.attachChild(frontSapoWall);
+		// The right of the box.
+		final Box rightSapoWall = new Box("rightSapoWall", new Vector3f(sapoWidth, 0,
+			-(sapoZMid - boxesLength)), sapoThick, sapoHeight,
+			((sapoBack - sapoFront) / 2.0f) + boxesLength);
+		sapoStaticNode.attachChild(rightSapoWall);
+		
+		Float incX = (2 * sapoWidth) / 3.0f;
+		// The inner right of the box.
+		final Box innerRightSapoWall = new Box("innerRightSapoWall", new Vector3f(sapoWidth - incX, 0,
+			-(sapoZMid - boxesLength)), boxesThick, sapoHeight,
+			((sapoBack - sapoFront) / 2.0f) + boxesLength);
+		sapoStaticNode.attachChild(innerRightSapoWall);
+		
+		// The inner right of the box.
+		final Box innerLeftSapoWall = new Box("innerLeftSapoWall", new Vector3f(-sapoWidth + incX, 0,
+			-(sapoZMid - boxesLength)), boxesThick, sapoHeight,
+			((sapoBack - sapoFront) / 2.0f) + boxesLength);
+		sapoStaticNode.attachChild(innerLeftSapoWall);
+		
+		// The left of the box.
+		final Box leftSapoWall = new Box("leftSapoWall", new Vector3f(-sapoWidth, 0,
+			-(sapoZMid - boxesLength)), sapoThick, sapoHeight,
+			((sapoBack - sapoFront) / 2.0f) + boxesLength);
+		sapoStaticNode.attachChild(leftSapoWall);
 	}
 
 	/*
@@ -137,21 +156,22 @@ public class Sapo
 		final Box lowerBoxesFloor = new Box("lowerBoxesFloor", lowerPoint, sapoWidth, boxesThick,
 			boxesLength);
 		sapoStaticNode.attachChild(lowerBoxesFloor);
-		final Box lowerBoxesFront = new Box("lowerBoxesFront", lowerPoint.add(0, boxesHigh, boxesLength), sapoWidth, boxesHigh,
-			boxesThick);
+		final Box lowerBoxesFront = new Box("lowerBoxesFront", lowerPoint.add(0, boxesHigh,
+			boxesLength), sapoWidth, boxesHigh, boxesThick);
 		sapoStaticNode.attachChild(lowerBoxesFront);
-		
+
 		/*
-		 * Ok. Now, with the others boxes, we have to do the same, changing only the center point.
+		 * Ok. Now, with the others boxes, we have to do the same, changing only the
+		 * center point.
 		 */
 		Vector3f middlePoint = lowerPoint.add(0, (sapoZMid - sapoFront) / 2.0f, 0);
-		final Box middleBoxesFloor = new Box("middleBoxesFloor", middlePoint, sapoWidth, boxesThick,
-			boxesLength);
+		final Box middleBoxesFloor = new Box("middleBoxesFloor", middlePoint, sapoWidth,
+			boxesThick, boxesLength);
 		sapoStaticNode.attachChild(middleBoxesFloor);
-		final Box middleBoxesFront = new Box("middleBoxesFront", middlePoint.add(0, boxesHigh, boxesLength), sapoWidth, boxesHigh,
-			boxesThick);
+		final Box middleBoxesFront = new Box("middleBoxesFront", middlePoint.add(0, boxesHigh,
+			boxesLength), sapoWidth, boxesHigh, boxesThick);
 		sapoStaticNode.attachChild(middleBoxesFront);
-		
+
 		/*
 		 * Finally, the last one
 		 */
@@ -159,8 +179,8 @@ public class Sapo
 		final Box upperBoxesFloor = new Box("upperBoxesFloor", upperPoint, sapoWidth, boxesThick,
 			boxesLength);
 		sapoStaticNode.attachChild(upperBoxesFloor);
-		final Box upperBoxesFront = new Box("upperBoxesFront", upperPoint.add(0, boxesHigh, boxesLength), sapoWidth, boxesHigh,
-			boxesThick);
+		final Box upperBoxesFront = new Box("upperBoxesFront", upperPoint.add(0, boxesHigh,
+			boxesLength), sapoWidth, boxesHigh, boxesThick);
 		sapoStaticNode.attachChild(upperBoxesFront);
 
 	}
