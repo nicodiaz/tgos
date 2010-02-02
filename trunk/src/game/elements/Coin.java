@@ -43,6 +43,7 @@ public class Coin
 		coinNode.setModelBound(new BoundingSphere());
 		coinNode.updateModelBound();
 
+		coinNode.setMaterial(Material.ICE);
 		
 		// And finally, generate the require physics
 		coinNode.generatePhysicsGeometry();
@@ -59,4 +60,10 @@ public class Coin
 		coinNode.getLocalTranslation().set(origin);
 	}
 
+	public Coin(PhysicsSpace theSpace, Node rootNode, Vector3f origin, Vector3f force)
+	{
+		this(theSpace, rootNode);
+		coinNode.getLocalTranslation().set(origin);
+		coinNode.addForce(force);
+	}
 }
