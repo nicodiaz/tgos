@@ -90,7 +90,6 @@ public class TgosMain extends SimplePhysicsGame
 					 * The player pressed the key and start a throw!!!. We must take that
 					 * moment!
 					 */
-					System.out.println("Presionaste papa!!!!");
 					initMoment = new Date();
 					playerIsThrowing = true;
 				}
