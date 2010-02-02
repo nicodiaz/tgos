@@ -19,7 +19,7 @@ public class Room
 	private StaticPhysicsNode room = null;
 	
 	// this factor is the size of bigger for lateral
-	private Float SIZEFACTOR = 50.0f;
+	private Float SIZEFACTOR = 40.0f;
 	
 	// doesn't care, how deeper is the floor/wall
 	private Float THICK = 1.5f;
