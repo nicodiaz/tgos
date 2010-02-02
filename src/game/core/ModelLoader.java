@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import com.jme.bounding.BoundingBox;
+import com.jme.bounding.BoundingSphere;
+import com.jme.math.Vector3f;
 import com.jme.scene.Spatial;
 import com.jme.util.export.binary.BinaryImporter;
 import com.jme.util.resource.ResourceLocatorTool;
@@ -108,6 +110,7 @@ public class ModelLoader
 		 */
 		output.setModelBound(new BoundingBox());
 		output.updateModelBound();
+		
 		return output;
 	}
 	
