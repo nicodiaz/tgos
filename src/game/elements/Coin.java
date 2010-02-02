@@ -4,6 +4,7 @@ import game.core.ModelLoader;
 
 import java.util.List;
 
+import com.jme.bounding.BoundingBox;
 import com.jme.bounding.BoundingSphere;
 import com.jme.math.Vector3f;
 import com.jme.scene.Node;
@@ -40,18 +41,12 @@ public class Coin
 		coinNode.getLocalTranslation().set(new Vector3f(-13f, 50f, -310f));
 		coinNode.getLocalScale().set(0.0025f, 0.0025f, 0.0025f);
 		
-		coinNode.setModelBound(new BoundingSphere());
+		coinNode.setModelBound(new BoundingBox());
 		coinNode.updateModelBound();
 
-		coinNode.setMaterial(Material.ICE);
-		
 		// And finally, generate the require physics
 		coinNode.generatePhysicsGeometry();
 		coinNode.computeMass();
-		
-		final Material coinMaterial = new Material("coin material");
-		coinNode.setMaterial(coinMaterial);
-		
 	}
 
 	public Coin(PhysicsSpace theSpace, Node rootNode, Vector3f origin)

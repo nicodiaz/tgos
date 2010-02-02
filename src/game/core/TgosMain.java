@@ -1,24 +1,19 @@
 package game.core;
 
-import java.util.Date;
-
 import game.elements.Coin;
 import game.elements.Room;
 import game.elements.Sapo;
 
+import java.util.Date;
+
 import com.jme.input.InputHandler;
-import com.jme.input.KeyInput;
 import com.jme.input.action.InputAction;
 import com.jme.input.action.InputActionEvent;
-import com.jme.input.action.MouseInputAction;
-import com.jme.input.lwjgl.LWJGLMouseInput;
 import com.jme.light.DirectionalLight;
 import com.jme.math.Vector3f;
 import com.jme.renderer.ColorRGBA;
 import com.jme.scene.state.LightState;
 import com.jme.system.DisplaySystem;
-import com.jmex.awt.input.AWTMouseInput;
-import com.jmex.physics.DynamicPhysicsNode;
 import com.jmex.physics.util.SimplePhysicsGame;
 
 public class TgosMain extends SimplePhysicsGame
@@ -26,12 +21,12 @@ public class TgosMain extends SimplePhysicsGame
 
 	// actions variables
 	private boolean playerIsThrowing = false;
-	private final Float MAXPOWER = 10000.0f;
-	private final Float MINPOWER = 700.0f;
-	private final Float MULTPOWER = 0.00001f;
-	
+	private final Float MAXPOWER = 3000.0f;
+	private final Float MINPOWER = 100.0f;
+	private final Float MULTPOWER = 0.9f;
+
 	// Element
-//	private Coin theCoin = null;
+	// private Coin theCoin = null;
 
 	@Override
 	protected void simpleInitGame()
@@ -41,13 +36,7 @@ public class TgosMain extends SimplePhysicsGame
 
 		Sapo sapo = new Sapo(getPhysicsSpace(), rootNode);
 
-		// Coin coin = new Coin(getPhysicsSpace(), rootNode, new Vector3f(0, 20f, -(100f -
-		// 3)));
-		// Coin coin = new Coin(getPhysicsSpace(), rootNode, new Vector3f(0, 0, 0));
-
 		initActions();
-
-//		pause = true;
 	}
 
 	private void turnOnTheLights()
@@ -97,8 +86,10 @@ public class TgosMain extends SimplePhysicsGame
 			{
 				if (evt.getTriggerPressed())
 				{
-					// The player pressed the key and start a throw!!!. We must take that
-					// moment!
+					/*
+					 * The player pressed the key and start a throw!!!. We must take that
+					 * moment!
+					 */
 					System.out.println("Presionaste papa!!!!");
 					initMoment = new Date();
 					playerIsThrowing = true;
@@ -111,6 +102,10 @@ public class TgosMain extends SimplePhysicsGame
 
 				// We must scale the power to our scale, between min and max power.
 				Float power = (finishMoment.getTime() - initMoment.getTime()) * MULTPOWER;
+				
+				//Debug
+				System.out.println("La resta de tiempos es: " + (finishMoment.getTime() - initMoment.getTime()));
+				
 				if (power < MINPOWER)
 				{
 					power = MINPOWER;
@@ -123,15 +118,14 @@ public class TgosMain extends SimplePhysicsGame
 				Vector3f shootDirection = cam.getDirection();
 				Vector3f shootForce = shootDirection.mult(power);
 				Coin coin = new Coin(getPhysicsSpace(), rootNode, shootOrigin, shootForce);
-				
+
 				// DEBUG
 				System.out.println("POWA: " + power);
 				System.out.println("La direccion es: " + cam.getDirection());
 				System.out.println("Potencia Aplicada: " + power);
-				System.out.println("La fuerza aplicada es es: " + shootForce + " y posición inicial: " + shootOrigin);
-				
-				
-				
+				System.out.println("La fuerza aplicada es es: " + shootForce
+					+ " y posición inicial: " + shootOrigin);
+
 				// TODO: Angle
 				// Vector3f shootingVector = new Vector3f(power
 				// * (float) Math.sin(fireOrientationAngle), 0, power
