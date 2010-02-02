@@ -17,7 +17,7 @@ public class TgosMain extends SimplePhysicsGame
 		
 		Sapo sapo = new Sapo(getPhysicsSpace(), rootNode);
 		
-		Coin coin = new Coin(getPhysicsSpace(), rootNode);
+//		Coin coin = new Coin(getPhysicsSpace(), rootNode);
 		
 		
 	}
