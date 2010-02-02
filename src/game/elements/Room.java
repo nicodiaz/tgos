@@ -19,28 +19,19 @@ public class Room
 	private StaticPhysicsNode room = null;
 	
 	// this factor is the size of bigger for lateral
-	private Float SIZEFACTOR = 20.0f;
+	private Float SIZEFACTOR = 50.0f;
 	
 	// doesn't care, how deeper is the floor/wall
 	private Float THICK = 1.5f;
 	
 	// How far is the front wall
-	private Float FAR = 80.0f;
+	private Float FAR = 200.0f;
 	
 	
 	public Room(PhysicsSpace theSpace, Node rootNode)
 	{
-		this(theSpace, rootNode, 100.0f, 1.5f, 400.0f);
-	}
-	
-	public Room(PhysicsSpace theSpace, Node rootNode, float size, float thick, float far)
-	{
 		room = theSpace.createStaticNode();
 		rootNode.attachChild(room);
-		
-		this.SIZEFACTOR = size;
-		this.THICK = thick;
-		this.FAR = far;
 		
 //		//Now we use the boxes of JME, that are trimeshes. We start with the front Wall. 
 		final Box frontWallBox = new Box("frontWall", new Vector3f(0, 0, -FAR), SIZEFACTOR, SIZEFACTOR, THICK);
@@ -62,11 +53,17 @@ public class Room
 		final Box leftWallBox = new Box("leftWall", new Vector3f(-SIZEFACTOR, 0, 0), THICK, SIZEFACTOR, FAR);
 		room.attachChild(leftWallBox);
 		
-		// ESTAS 2 LINEAS SI ME HA TRAIDO PROBLEMAS EHHHHHHHHHHHH LPM!!!!!!!
-//		final Box roomBox = new Box("room", new Vector3f(0, 0, 0), SIZEFACTOR, SIZEFACTOR, FAR);
-//		room.attachChild(roomBox);
-		
 		room.generatePhysicsGeometry();
+		
+	}
+	
+	public Room(PhysicsSpace theSpace, Node rootNode, float size, float thick, float far)
+	{
+		this(theSpace, rootNode);
+		
+		this.SIZEFACTOR = size;
+		this.THICK = thick;
+		this.FAR = far;
 	}
 	
 	public StaticPhysicsNode getRoom()

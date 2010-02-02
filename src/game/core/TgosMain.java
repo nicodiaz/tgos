@@ -1,6 +1,5 @@
 package game.core;
 
-import game.elements.Coin;
 import game.elements.Room;
 import game.elements.Sapo;
 
@@ -17,9 +16,9 @@ public class TgosMain extends SimplePhysicsGame
 		
 		Sapo sapo = new Sapo(getPhysicsSpace(), rootNode);
 		
-//		Coin coin = new Coin(getPhysicsSpace(), rootNode);
+//		Coin coin = new Coin(getPhysicsSpace(), rootNode, new Vector3f(0, 20f, -(100f - 3)));
 		
-		
+		pause = true;
 	}
 	
 
