@@ -12,6 +12,7 @@ import com.jme.input.action.InputActionEvent;
 import com.jme.light.DirectionalLight;
 import com.jme.math.Vector3f;
 import com.jme.renderer.ColorRGBA;
+import com.jme.scene.shape.AxisRods;
 import com.jme.scene.state.LightState;
 import com.jme.system.DisplaySystem;
 import com.jmex.physics.util.SimplePhysicsGame;
@@ -31,6 +32,9 @@ public class TgosMain extends SimplePhysicsGame
 	@Override
 	protected void simpleInitGame()
 	{
+		// First, for debug, we set the axis.
+		showAxisRods();
+		
 		// We start creating the room
 		Room room = new Room(getPhysicsSpace(), rootNode);
 
@@ -65,6 +69,14 @@ public class TgosMain extends SimplePhysicsGame
 
 	}
 
+	private void showAxisRods()
+	{
+		// Create an right handed axisrods object with a scale of 1/2
+		AxisRods ar = new AxisRods("rods", true, 0.5f);
+		rootNode.attachChild(ar);
+	}
+	
+	
 	/*
 	 * The Action Clases.
 	 */

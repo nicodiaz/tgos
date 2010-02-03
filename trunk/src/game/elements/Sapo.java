@@ -1,5 +1,6 @@
 package game.elements;
 
+import com.jme.bounding.BoundingBox;
 import com.jme.math.FastMath;
 import com.jme.math.Vector3f;
 import com.jme.scene.Node;
@@ -43,8 +44,10 @@ public class Sapo
 		this.rootNode = rootNode;
 
 		sapoStaticNode = space.createStaticNode();
+		sapoStaticNode.setModelBound(new BoundingBox());
+		sapoStaticNode.updateModelBound();
 		rootNode.attachChild(sapoStaticNode);
-
+		
 		makeWalls();
 		makeInnerFalls();
 		makeBoxes();

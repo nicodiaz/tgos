@@ -15,6 +15,7 @@ import com.jmex.physics.material.Material;
 
 
 // TODO: Change the 3ds model for a jme primitive (cylinder)
+//TODO: Make a AbstractCoin class where the PhysicNode exists, maybe solve the black screen problem
 public class Coin
 {
 	private DynamicPhysicsNode coinNode = null;
@@ -30,6 +31,8 @@ public class Coin
 	{
 		coinNode = theSpace.createDynamicNode();
 		rootNode.attachChild(coinNode);
+		coinNode.setModelBound(new BoundingBox());
+		coinNode.updateModelBound();
 
 		Node coinPhysicNode = (Node) ModelLoader.load3ds("models/coin.3ds");
 //		coinNode.getLocalRotation().fromAngleNormalAxis(-(float) Math.PI / 2.0f,
@@ -40,9 +43,6 @@ public class Coin
 		
 		coinNode.getLocalTranslation().set(new Vector3f(-13f, 50f, -310f));
 		coinNode.getLocalScale().set(0.0025f, 0.0025f, 0.0025f);
-		
-		coinNode.setModelBound(new BoundingBox());
-		coinNode.updateModelBound();
 
 		// And finally, generate the require physics
 		coinNode.generatePhysicsGeometry();
