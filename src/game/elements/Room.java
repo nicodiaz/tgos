@@ -1,5 +1,6 @@
 package game.elements;
 
+import com.jme.bounding.BoundingBox;
 import com.jme.math.Vector3f;
 import com.jme.scene.Node;
 import com.jme.scene.shape.Box;
@@ -31,6 +32,8 @@ public class Room
 	public Room(PhysicsSpace theSpace, Node rootNode)
 	{
 		room = theSpace.createStaticNode();
+		room.setModelBound(new BoundingBox());
+		room.updateModelBound();
 		rootNode.attachChild(room);
 		
 //		//Now we use the boxes of JME, that are trimeshes. We start with the front Wall. 
