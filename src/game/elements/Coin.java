@@ -5,7 +5,6 @@ import game.core.ModelLoader;
 import java.util.List;
 
 import com.jme.bounding.BoundingBox;
-import com.jme.bounding.BoundingSphere;
 import com.jme.math.Vector3f;
 import com.jme.scene.Node;
 import com.jme.scene.Spatial;
@@ -18,7 +17,7 @@ import com.jmex.physics.material.Material;
 //TODO: Make a AbstractCoin class where the PhysicNode exists, maybe solve the black screen problem
 public class Coin
 {
-	private DynamicPhysicsNode coinNode = null;
+	private DynamicPhysicsNode coinDynamicNode = null;
 	private Spatial physicCoin = null;
 
 	/**
@@ -29,36 +28,39 @@ public class Coin
 	 */
 	public Coin(PhysicsSpace theSpace, Node rootNode)
 	{
-		coinNode = theSpace.createDynamicNode();
-		rootNode.attachChild(coinNode);
-		coinNode.setModelBound(new BoundingBox());
-		coinNode.updateModelBound();
+		coinDynamicNode = theSpace.createDynamicNode();
+		rootNode.attachChild(coinDynamicNode);
+		coinDynamicNode.setModelBound(new BoundingBox());
+		coinDynamicNode.updateModelBound();
 
 		Node coinPhysicNode = (Node) ModelLoader.load3ds("models/coin.3ds");
-//		coinNode.getLocalRotation().fromAngleNormalAxis(-(float) Math.PI / 2.0f,
+//		coinDynamicNode.getLocalRotation().fromAngleNormalAxis(-(float) Math.PI / 2.0f,
 //			new Vector3f(1, 0, 0));
 		List<Spatial> spatialList = ((Node) coinPhysicNode.getChild(0)).getChildren();
 		physicCoin = spatialList.get(0);
-		coinNode.attachChild(physicCoin);
+		coinDynamicNode.attachChild(physicCoin);
 		
-		coinNode.getLocalTranslation().set(new Vector3f(-13f, 50f, -310f));
-		coinNode.getLocalScale().set(0.0025f, 0.0025f, 0.0025f);
+		coinDynamicNode.getLocalTranslation().set(new Vector3f(-13f, 50f, -310f));
+		coinDynamicNode.getLocalScale().set(0.0025f, 0.0025f, 0.0025f);
 
+		// The coin material must be some sort of metal.
+		coinDynamicNode.setMaterial(Material.IRON);
+		
 		// And finally, generate the require physics
-		coinNode.generatePhysicsGeometry();
-		coinNode.computeMass();
+		coinDynamicNode.generatePhysicsGeometry();
+		coinDynamicNode.computeMass();
 	}
 
 	public Coin(PhysicsSpace theSpace, Node rootNode, Vector3f origin)
 	{
 		this(theSpace, rootNode);
-		coinNode.getLocalTranslation().set(origin);
+		coinDynamicNode.getLocalTranslation().set(origin);
 	}
 
 	public Coin(PhysicsSpace theSpace, Node rootNode, Vector3f origin, Vector3f force)
 	{
 		this(theSpace, rootNode);
-		coinNode.getLocalTranslation().set(origin);
-		coinNode.addForce(force);
+		coinDynamicNode.getLocalTranslation().set(origin);
+		coinDynamicNode.addForce(force);
 	}
 }
