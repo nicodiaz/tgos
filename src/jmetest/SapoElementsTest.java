@@ -8,10 +8,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.net.URL;
 
+import com.jme.image.Texture;
 import com.jme.math.Vector3f;
 import com.jme.scene.Spatial;
+import com.jme.scene.state.BlendState;
+import com.jme.scene.state.TextureState;
+import com.jme.util.TextureManager;
 import com.jme.util.export.binary.BinaryImporter;
 import com.jme.util.resource.ResourceLocatorTool;
 import com.jme.util.resource.SimpleResourceLocator;
@@ -37,8 +43,9 @@ public class SapoElementsTest extends SimplePhysicsGame
 	 */
 	public static void main(String[] args)
 	{
-		SapoElementsTest app = new SapoElementsTest();
-		app.start();
+		 SapoElementsTest app = new SapoElementsTest();
+		 app.start();
+
 	}
 
 	protected void simpleUpdate()
@@ -65,27 +72,66 @@ public class SapoElementsTest extends SimplePhysicsGame
 		// c.updateModelBound();
 		// staticNode.attachChild(c);
 
-//		Node top = (Node) load3ds("models/top.x3d");
-//		staticNode.attachChild(top);
-//		
-//		staticNode.getLocalRotation().fromAngleNormalAxis(FastMath.PI / 2.0f,
-//			new Vector3f(-1, 0, 0));
-//		staticNode.getLocalScale().set(1f, 1f, 1f);
-//		staticNode.getLocalTranslation().set(new Vector3f(0, 0, 0));
+		// Node top = (Node) load3ds("models/top.x3d");
+		// staticNode.attachChild(top);
+		//		
+		// staticNode.getLocalRotation().fromAngleNormalAxis(FastMath.PI / 2.0f,
+		// new Vector3f(-1, 0, 0));
+		// staticNode.getLocalScale().set(1f, 1f, 1f);
+		// staticNode.getLocalTranslation().set(new Vector3f(0, 0, 0));
 
 		// final Box b = new Box("box", new Vector3f(), 20, 0.20f, 20f);
 		// staticNode.attachChild(b);
 
+		SapoLittle theSapo = new SapoLittle(getPhysicsSpace(), rootNode, display, new Vector3f());
+		StaticPhysicsNode lsStaticNode = theSapo.getSapoLittleStaticNode();
+
+		// Texture
+		File textures = new File("models/woodTexture.jpg");
+		try
+		{
+			SimpleResourceLocator location = new SimpleResourceLocator(textures.toURI().toURL());
+			ResourceLocatorTool.addResourceLocator(ResourceLocatorTool.TYPE_TEXTURE, location);
+		}
+		catch (MalformedURLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (URISyntaxException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		URL u = ResourceLocatorTool.locateResource(ResourceLocatorTool.TYPE_TEXTURE,
+			"models/woodTexture.jpg");
+		System.err.println("FOUND URL: " + u);
+
+		TextureState ts = display.getRenderer().createTextureState();
+		ts.setEnabled(true);
+		ts.setTexture(TextureManager.loadTexture(u, Texture.MinificationFilter.Trilinear,
+			Texture.MagnificationFilter.Bilinear));
+
+		lsStaticNode.setRenderState(ts);
+
+		BlendState alpha = display.getRenderer().createBlendState();
+		alpha.setBlendEnabled(true);
+		alpha.setSourceFunction(BlendState.SourceFunction.SourceAlpha);
+		alpha.setDestinationFunction(BlendState.DestinationFunction.OneMinusSourceAlpha);
+		alpha.setTestEnabled(true);
+		alpha.setTestFunction(BlendState.TestFunction.GreaterThan);
+		alpha.setEnabled(true);
+		lsStaticNode.setRenderState(alpha);
 		
-		SapoLittle theSapo = new SapoLittle(getPhysicsSpace(), rootNode, new Vector3f());
+		
 		staticNode.generatePhysicsGeometry();
 
-//		DynamicPhysicsNode dynamicNode = getPhysicsSpace().createDynamicNode();
-//		rootNode.attachChild(dynamicNode);
-//		final Box f = new Box("falling box", new Vector3f(), 1, 1, 1);
-//		dynamicNode.attachChild(f);
-//		dynamicNode.generatePhysicsGeometry();
-//		dynamicNode.getLocalTranslation().set(new Vector3f(65, 80, -30));
+		// DynamicPhysicsNode dynamicNode = getPhysicsSpace().createDynamicNode();
+		// rootNode.attachChild(dynamicNode);
+		// final Box f = new Box("falling box", new Vector3f(), 1, 1, 1);
+		// dynamicNode.attachChild(f);
+		// dynamicNode.generatePhysicsGeometry();
+		// dynamicNode.getLocalTranslation().set(new Vector3f(65, 80, -30));
 
 		pause = true;
 

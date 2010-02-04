@@ -34,7 +34,7 @@ public class TgosMain extends SimplePhysicsGame
 		// We start creating the room
 		Room room = new Room(getPhysicsSpace(), rootNode, display);
 
-		Sapo sapo = new Sapo(getPhysicsSpace(), rootNode);
+		Sapo sapo = new Sapo(getPhysicsSpace(), rootNode, display);
 
 		initActions();
 	}
@@ -107,7 +107,7 @@ public class TgosMain extends SimplePhysicsGame
 				Vector3f shootOrigin = cam.getLocation();
 				Vector3f shootDirection = cam.getDirection();
 				Vector3f shootForce = shootDirection.mult(power);
-				Coin coin = new Coin(getPhysicsSpace(), rootNode, shootOrigin, shootForce);
+				Coin coin = new Coin(getPhysicsSpace(), rootNode, display, shootOrigin, shootForce);
 
 				// DEBUG
 				System.out.println("POWA: " + power);
