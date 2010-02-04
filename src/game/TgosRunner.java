@@ -5,6 +5,8 @@ import game.core.TgosMain;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.jme.app.AbstractGame.ConfigShowMode;
+
 /**
  * The Game Of Sapo ----------------
  * 
