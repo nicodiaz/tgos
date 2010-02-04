@@ -8,6 +8,7 @@ import com.jme.scene.shape.Box;
 import com.jme.scene.shape.Torus;
 import com.jmex.physics.PhysicsSpace;
 import com.jmex.physics.StaticPhysicsNode;
+import com.jmex.physics.material.Material;
 
 /**
  * This is the modelling of the Sapo Box, with the inner fallings and outter walls.
@@ -63,6 +64,9 @@ public class Sapo
 		makeBoxes();
 		makeTop();
 		makeFinalDeco();
+
+		// The Sapo Box is made in concrete
+		sapoStaticNode.setMaterial(Material.CONCRETE);
 
 		sapoStaticNode.setModelBound(new BoundingBox());
 		sapoStaticNode.updateModelBound();
@@ -294,12 +298,19 @@ public class Sapo
 	private void makeFinalDeco()
 	{
 
-		// The front, that cover the left holes. This covers the boxes.
+		// The upper front, that cover the left holes. This covers the boxes.
 		final Box frontTop = new Box("frontTop", new Vector3f(), sapoWidth, topLineThick,
 			2.0f * boxesLength);
 		frontTop.getLocalTranslation().set(
 			new Vector3f(0, (sapoHeight + topLineThick), -(sapoFront)));
 		sapoStaticNode.attachChild(frontTop);
+
+		// The front, that cover the front.
+		final Box frontFront = new Box("frontFront", new Vector3f(), sapoWidth, 1.5f * boxesHigh,
+			boxesThick);
+		frontFront.getLocalTranslation().set(
+			new Vector3f(0, (sapoHeight - 1.5f * boxesHigh), -(sapoFront - 2.0f * boxesLength)));
+		sapoStaticNode.attachChild(frontFront);
 
 		// The upper back wall.
 		final Box upperBackSapoWall = new Box("upperBackSapoWall", new Vector3f(0, sapoHeight

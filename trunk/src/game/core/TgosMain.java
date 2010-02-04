@@ -24,7 +24,7 @@ public class TgosMain extends SimplePhysicsGame
 	private boolean playerIsThrowing = false;
 	private final Float MAXPOWER = 2000.0f;
 	private final Float MINPOWER = 100.0f;
-	private final Float MULTPOWER = 0.9f;
+	private final Float MULTPOWER = 3f;
 
 	// Element
 	// private Coin theCoin = null;
