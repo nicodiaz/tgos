@@ -5,7 +5,6 @@ import com.jme.math.FastMath;
 import com.jme.math.Vector3f;
 import com.jme.scene.Node;
 import com.jme.scene.shape.Box;
-import com.jme.scene.shape.Torus;
 import com.jmex.physics.PhysicsSpace;
 import com.jmex.physics.StaticPhysicsNode;
 import com.jmex.physics.material.Material;
@@ -48,6 +47,7 @@ public class Sapo
 
 	// Other measures
 	private Float backWallHeight = 3.0f;
+	private Float littleSapoScale = 3.0f;
 
 	public Sapo(PhysicsSpace theSpace, Node rootNode)
 	{
@@ -64,9 +64,10 @@ public class Sapo
 		makeBoxes();
 		makeTop();
 		makeFinalDeco();
+		makeLittleSapo();
 
-		// The Sapo Box is made in concrete
-		sapoStaticNode.setMaterial(Material.CONCRETE);
+		// The Sapo Box is made in wood
+		sapoStaticNode.setMaterial(Material.WOOD);
 
 		sapoStaticNode.setModelBound(new BoundingBox());
 		sapoStaticNode.updateModelBound();
@@ -330,6 +331,18 @@ public class Sapo
 			((sapoBack - sapoFront) / 2.0f) + boxesLength);
 		sapoStaticNode.attachChild(upperRightSapoWall);
 
+	}
+	
+	private void makeLittleSapo()
+	{
+		SapoLittle sl = new SapoLittle(space, rootNode, new Vector3f());
+		StaticPhysicsNode sl_staticNode = sl.getSapoLittleStaticNode();
+		sapoStaticNode.attachChild(sl_staticNode);
+		sl_staticNode.getLocalTranslation().set(0, sapoHeight + (littleSapoScale * sl.getHeight()), -(sapoBack - littleSapoScale * sl.getWidth() * 1.2f));
+		sl_staticNode.getLocalScale().set(littleSapoScale, littleSapoScale, littleSapoScale);
+		
+		
+		
 	}
 
 }
