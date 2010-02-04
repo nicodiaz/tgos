@@ -4,13 +4,9 @@ import com.jme.bounding.BoundingBox;
 import com.jme.light.PointLight;
 import com.jme.math.Vector3f;
 import com.jme.renderer.ColorRGBA;
-import com.jme.renderer.Renderer;
 import com.jme.scene.Node;
-import com.jme.scene.Spatial;
 import com.jme.scene.shape.Box;
-import com.jme.scene.state.BlendState;
 import com.jme.scene.state.LightState;
-import com.jme.scene.state.MaterialState;
 import com.jme.system.DisplaySystem;
 import com.jmex.physics.PhysicsSpace;
 import com.jmex.physics.StaticPhysicsNode;
@@ -23,12 +19,9 @@ import com.jmex.physics.StaticPhysicsNode;
  * @author Hari
  *
  */
-public class Room
+public class Room extends SapoElement
 {
 	private StaticPhysicsNode room = null;
-	private Node rootNode = null;
-	private PhysicsSpace physicSpace = null;
-	private DisplaySystem display = null;
 	
 	// this factor is the size of bigger for lateral
 	private Float size = 40.0f;
@@ -42,9 +35,7 @@ public class Room
 	
 	public Room(PhysicsSpace theSpace, Node rootNode, DisplaySystem disp)
 	{
-		physicSpace = theSpace;
-		this.rootNode = rootNode;
-		display = disp;
+		super(theSpace, rootNode, disp);
 		
 		room = theSpace.createStaticNode();
 		room.setModelBound(new BoundingBox());
@@ -81,9 +72,11 @@ public class Room
 		leftWallBox.getLocalTranslation().set(new Vector3f(-size, 0, 0));
 		color(leftWallBox, new ColorRGBA(102.0f / 255f, 51.0f / 255.0f , 255.0f / 255.0f, 1.0f));
 		
+		room.setModelBound(new BoundingBox());
+		room.updateModelBound();
+		
 		room.generatePhysicsGeometry();
 		
-//		color(room, new ColorRGBA(102.0f / 255f, 255.0f / 255.0f , 51.0f / 255.0f, 1.0f));
 		turnOnTheLights();
 	}
 	
@@ -94,31 +87,6 @@ public class Room
 		this.size = size;
 		this.thick = thick;
 		this.far = far;
-	}
-	
-	/**
-	 * Little helper method to color a spatial.
-	 * 
-	 * @param spatial
-	 *            the spatial to be colored
-	 * @param color
-	 *            desired color
-	 */
-	private void color(Spatial spatial, ColorRGBA color)
-	{
-		final MaterialState materialState = display.getRenderer().createMaterialState();
-		materialState.setDiffuse(color);
-		if (color.a < 1)
-		{
-			final BlendState blendState = display.getRenderer().createBlendState();
-			blendState.setEnabled(true);
-			blendState.setBlendEnabled(true);
-			blendState.setSourceFunction(BlendState.SourceFunction.SourceAlpha);
-			blendState.setDestinationFunction(BlendState.DestinationFunction.OneMinusSourceAlpha);
-			spatial.setRenderState(blendState);
-			spatial.setRenderQueueMode(Renderer.QUEUE_TRANSPARENT);
-		}
-		spatial.setRenderState(materialState);
 	}
 	
 	public StaticPhysicsNode getRoom()

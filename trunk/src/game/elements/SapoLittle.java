@@ -6,6 +6,7 @@ package game.elements;
 import com.jme.math.Vector3f;
 import com.jme.scene.Node;
 import com.jme.scene.shape.Box;
+import com.jme.system.DisplaySystem;
 import com.jmex.physics.PhysicsSpace;
 import com.jmex.physics.StaticPhysicsNode;
 import com.jmex.physics.material.Material;
@@ -16,7 +17,7 @@ import com.jmex.physics.material.Material;
  * @author Hari
  *
  */
-public class SapoLittle
+public class SapoLittle extends SapoElement
 {
 	
 	private StaticPhysicsNode sapoLittleStaticNode = null;
@@ -31,9 +32,10 @@ public class SapoLittle
 	private Float thick = 0.025f;
 	
 	
-	public SapoLittle(PhysicsSpace theSpace, Node rootNode, Vector3f origin)
+	public SapoLittle(PhysicsSpace theSpace, Node rootNode, DisplaySystem disp, Vector3f origin)
 	{
-		sapoLittleStaticNode = theSpace.createStaticNode();
+		super(theSpace, rootNode, disp);
+		sapoLittleStaticNode = space.createStaticNode();
 		rootNode.attachChild(sapoLittleStaticNode);
 		
 //		//Little Sapo back Wall. 
