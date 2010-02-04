@@ -9,12 +9,8 @@ import java.util.Date;
 import com.jme.input.InputHandler;
 import com.jme.input.action.InputAction;
 import com.jme.input.action.InputActionEvent;
-import com.jme.light.DirectionalLight;
 import com.jme.math.Vector3f;
-import com.jme.renderer.ColorRGBA;
 import com.jme.scene.shape.AxisRods;
-import com.jme.scene.state.LightState;
-import com.jme.system.DisplaySystem;
 import com.jmex.physics.util.SimplePhysicsGame;
 
 public class TgosMain extends SimplePhysicsGame
@@ -36,27 +32,11 @@ public class TgosMain extends SimplePhysicsGame
 		showAxisRods();
 		
 		// We start creating the room
-		Room room = new Room(getPhysicsSpace(), rootNode);
+		Room room = new Room(getPhysicsSpace(), rootNode, display);
 
 		Sapo sapo = new Sapo(getPhysicsSpace(), rootNode);
 
 		initActions();
-	}
-
-	private void turnOnTheLights()
-	{
-		/** Set up a basic, default light. */
-		DirectionalLight light = new DirectionalLight();
-		light.setDiffuse(new ColorRGBA(1.0f, 1.0f, 1.0f, 1.0f));
-		light.setAmbient(new ColorRGBA(0.5f, 0.5f, 0.5f, 1.0f));
-		light.setDirection(new Vector3f(0, -1, 1));
-		light.setEnabled(true);
-
-		/** Attach the light to a lightState and the lightState to rootNode. */
-		LightState lightState = DisplaySystem.getDisplaySystem().getRenderer().createLightState();
-		lightState.setEnabled(true);
-		lightState.attach(light);
-		rootNode.setRenderState(lightState);
 	}
 
 	private void initActions()
@@ -75,7 +55,6 @@ public class TgosMain extends SimplePhysicsGame
 		AxisRods ar = new AxisRods("rods", true, 0.5f);
 		rootNode.attachChild(ar);
 	}
-	
 	
 	/*
 	 * The Action Clases.
