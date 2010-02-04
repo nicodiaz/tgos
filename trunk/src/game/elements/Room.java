@@ -37,24 +37,29 @@ public class Room
 		rootNode.attachChild(room);
 		
 //		//Now we use the boxes of JME, that are trimeshes. We start with the front Wall. 
-		final Box frontWallBox = new Box("frontWall", new Vector3f(0, 0, -FAR), SIZEFACTOR, SIZEFACTOR, THICK);
+		final Box frontWallBox = new Box("frontWall", new Vector3f(), SIZEFACTOR, SIZEFACTOR, THICK);
 		room.attachChild(frontWallBox);
+		frontWallBox.getLocalTranslation().set(new Vector3f(0, 0, -FAR));
 //
 //		// The floor
-		final Box floorBox = new Box("floor", new Vector3f(0, -SIZEFACTOR, 0), SIZEFACTOR, THICK, FAR);
+		final Box floorBox = new Box("floor", new Vector3f(), SIZEFACTOR, THICK, FAR);
 		room.attachChild(floorBox);
+		floorBox.getLocalTranslation().set(new Vector3f(0, -SIZEFACTOR, 0));
 //
 //		// The roof
-		final Box roofBox = new Box("roof", new Vector3f(0, SIZEFACTOR, 0), SIZEFACTOR, THICK, FAR);
+		final Box roofBox = new Box("roof", new Vector3f(), SIZEFACTOR, THICK, FAR);
 		room.attachChild(roofBox);
+		roofBox.getLocalTranslation().set(new Vector3f(0, SIZEFACTOR, 0));
 //		
 //		// The right wall
-		final Box rightWallBox = new Box("rightWall", new Vector3f(SIZEFACTOR, 0, 0), THICK, SIZEFACTOR, FAR);
+		final Box rightWallBox = new Box("rightWall", new Vector3f(), THICK, SIZEFACTOR, FAR);
 		room.attachChild(rightWallBox);
+		rightWallBox.getLocalTranslation().set(new Vector3f(SIZEFACTOR, 0, 0));
 //		
 //		// The left wall
-		final Box leftWallBox = new Box("leftWall", new Vector3f(-SIZEFACTOR, 0, 0), THICK, SIZEFACTOR, FAR);
+		final Box leftWallBox = new Box("leftWall", new Vector3f(), THICK, SIZEFACTOR, FAR);
 		room.attachChild(leftWallBox);
+		leftWallBox.getLocalTranslation().set(new Vector3f(-SIZEFACTOR, 0, 0));
 		
 		room.generatePhysicsGeometry();
 		

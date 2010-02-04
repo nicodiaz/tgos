@@ -22,7 +22,7 @@ public class TgosMain extends SimplePhysicsGame
 
 	// actions variables
 	private boolean playerIsThrowing = false;
-	private final Float MAXPOWER = 3000.0f;
+	private final Float MAXPOWER = 2000.0f;
 	private final Float MINPOWER = 100.0f;
 	private final Float MULTPOWER = 0.9f;
 
