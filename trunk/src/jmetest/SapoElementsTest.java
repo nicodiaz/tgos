@@ -1,6 +1,6 @@
 package jmetest;
 
-import game.elements.SapoLittle;
+import game.elements.Coin;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -8,16 +8,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.net.URL;
 
-import com.jme.image.Texture;
-import com.jme.math.Vector3f;
 import com.jme.scene.Spatial;
-import com.jme.scene.state.BlendState;
-import com.jme.scene.state.TextureState;
-import com.jme.util.TextureManager;
 import com.jme.util.export.binary.BinaryImporter;
 import com.jme.util.resource.ResourceLocatorTool;
 import com.jme.util.resource.SimpleResourceLocator;
@@ -83,48 +76,12 @@ public class SapoElementsTest extends SimplePhysicsGame
 		// final Box b = new Box("box", new Vector3f(), 20, 0.20f, 20f);
 		// staticNode.attachChild(b);
 
-		SapoLittle theSapo = new SapoLittle(getPhysicsSpace(), rootNode, display, new Vector3f());
-		StaticPhysicsNode lsStaticNode = theSapo.getSapoLittleStaticNode();
-
-		// Texture
-		File textures = new File("models/woodTexture.jpg");
-		try
-		{
-			SimpleResourceLocator location = new SimpleResourceLocator(textures.toURI().toURL());
-			ResourceLocatorTool.addResourceLocator(ResourceLocatorTool.TYPE_TEXTURE, location);
-		}
-		catch (MalformedURLException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (URISyntaxException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		URL u = ResourceLocatorTool.locateResource(ResourceLocatorTool.TYPE_TEXTURE,
-			"models/woodTexture.jpg");
-		System.err.println("FOUND URL: " + u);
-
-		TextureState ts = display.getRenderer().createTextureState();
-		ts.setEnabled(true);
-		ts.setTexture(TextureManager.loadTexture(u, Texture.MinificationFilter.Trilinear,
-			Texture.MagnificationFilter.Bilinear));
-
-		lsStaticNode.setRenderState(ts);
-
-		BlendState alpha = display.getRenderer().createBlendState();
-		alpha.setBlendEnabled(true);
-		alpha.setSourceFunction(BlendState.SourceFunction.SourceAlpha);
-		alpha.setDestinationFunction(BlendState.DestinationFunction.OneMinusSourceAlpha);
-		alpha.setTestEnabled(true);
-		alpha.setTestFunction(BlendState.TestFunction.GreaterThan);
-		alpha.setEnabled(true);
-		lsStaticNode.setRenderState(alpha);
-		
-		
+//		SapoLittle theSapo = new SapoLittle(getPhysicsSpace(), rootNode, display, new Vector3f());
+//		StaticPhysicsNode lsStaticNode = theSapo.getSapoLittleStaticNode();
 		staticNode.generatePhysicsGeometry();
+		
+		Coin coin = new Coin(getPhysicsSpace(), rootNode, display);
+		
 
 		// DynamicPhysicsNode dynamicNode = getPhysicsSpace().createDynamicNode();
 		// rootNode.attachChild(dynamicNode);

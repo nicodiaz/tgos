@@ -1,7 +1,18 @@
 package jmephysicstest;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+
+import com.jme.image.Texture;
 import com.jme.math.Vector3f;
+import com.jme.scene.Spatial;
 import com.jme.scene.shape.Box;
+import com.jme.scene.state.TextureState;
+import com.jme.util.TextureManager;
+import com.jme.util.resource.ResourceLocatorTool;
+import com.jme.util.resource.SimpleResourceLocator;
 import com.jmex.physics.DynamicPhysicsNode;
 import com.jmex.physics.StaticPhysicsNode;
 import com.jmex.physics.util.SimplePhysicsGame;
@@ -34,6 +45,7 @@ public class Lesson2 extends SimplePhysicsGame
 		 * como otro mesh.
 		 */
 		final Box visualFloorBox = new Box("floor", new Vector3f(), 5, 0.25f, 5);
+		applyTextures(visualFloorBox, "models/woodTexture.jpg");
 		staticNode.attachChild(visualFloorBox);
 
 		/*
@@ -53,12 +65,39 @@ public class Lesson2 extends SimplePhysicsGame
 		DynamicPhysicsNode dynamicNode = getPhysicsSpace().createDynamicNode();
 		rootNode.attachChild(dynamicNode);
 		final Box visualFallingBox = new Box("falling box", new Vector3f(), 0.5f, 0.5f, 0.5f);
+		applyTextures(visualFallingBox, "models/ironTexture.jpg");
 		dynamicNode.attachChild(visualFallingBox);
 		dynamicNode.generatePhysicsGeometry();
 		dynamicNode.getLocalTranslation().set( 0, 5, 0 );
 
 		
 		
+	}
+	
+	protected void applyTextures(Spatial node, String texturePath)
+	{
+		File textures = new File(texturePath);
+		try
+		{
+			SimpleResourceLocator location = new SimpleResourceLocator(textures.toURI().toURL());
+			ResourceLocatorTool.addResourceLocator(ResourceLocatorTool.TYPE_TEXTURE, location);
+		}
+		catch (MalformedURLException e)
+		{
+			e.printStackTrace();
+		}
+		catch (URISyntaxException e)
+		{
+			e.printStackTrace();
+		}
+		URL u = ResourceLocatorTool.locateResource(ResourceLocatorTool.TYPE_TEXTURE,
+			texturePath);
+
+		TextureState ts = display.getRenderer().createTextureState();
+		ts.setEnabled(true);
+		ts.setTexture(TextureManager.loadTexture(u, Texture.MinificationFilter.BilinearNearestMipMap,
+			Texture.MagnificationFilter.Bilinear));
+		node.setRenderState(ts);
 	}
 
 }
