@@ -44,7 +44,7 @@ public abstract class SapoElement
 
 
 
-	protected void applyTextures(Node node, String texturePath)
+	protected void applyTextures(Spatial node, String texturePath)
 	{
 		File textures = new File(texturePath);
 		try
@@ -65,7 +65,7 @@ public abstract class SapoElement
 
 		TextureState ts = display.getRenderer().createTextureState();
 		ts.setEnabled(true);
-		ts.setTexture(TextureManager.loadTexture(u, Texture.MinificationFilter.Trilinear,
+		ts.setTexture(TextureManager.loadTexture(u, Texture.MinificationFilter.BilinearNearestMipMap,
 			Texture.MagnificationFilter.Bilinear));
 		node.setRenderState(ts);
 	}

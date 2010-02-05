@@ -20,7 +20,7 @@ import com.jmex.physics.material.Material;
 
 // TODO: Change the 3ds model for a jme primitive (cylinder)
 //TODO: Make a AbstractCoin class where the PhysicNode exists, maybe solve the black screen problem
-public class Coin extends SapoElement
+public class Coin extends SapoElement implements Cloneable
 {
 	private DynamicPhysicsNode coinDynamicNode = null;
 	private Spatial physicCoin = null;
@@ -43,16 +43,11 @@ public class Coin extends SapoElement
 		physicCoin = spatialList.get(0);
 		coinDynamicNode.attachChild(physicCoin);
 
-		coinDynamicNode.getLocalTranslation().set(new Vector3f(-13f, 50f, -310f));
+		coinDynamicNode.getLocalTranslation().set(new Vector3f(1000f, 1000f, 1000f));
 		coinDynamicNode.getLocalScale().set(0.0025f, 0.0025f, 0.0025f);
 
 		// The coin material must be some sort of metal.
 		coinDynamicNode.setMaterial(Material.IRON);
-
-		// the right texture!
-		// applyTexture();
-
-//		color(coinDynamicNode, new ColorRGBA(122.0f / 255f, 122.0f / 255.0f, 122.0f / 255.0f, 1.0f));
 
 		coinDynamicNode.setModelBound(new BoundingBox());
 		coinDynamicNode.updateModelBound();
@@ -73,6 +68,13 @@ public class Coin extends SapoElement
 	{
 		this(theSpace, rootNode, disp);
 		coinDynamicNode.getLocalTranslation().set(origin);
+		coinDynamicNode.addForce(force);
+	}
+
+	public void setCoinShoot(Vector3f origin, Vector3f force)
+	{
+		coinDynamicNode.getLocalTranslation().set(origin);
+		coinDynamicNode.clearDynamics();
 		coinDynamicNode.addForce(force);
 	}
 }

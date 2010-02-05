@@ -1,16 +1,21 @@
 package game.core;
 
 import game.elements.Coin;
+import game.elements.CoinFactory;
 import game.elements.Room;
 import game.elements.Sapo;
 
 import java.util.Date;
+import java.util.logging.Logger;
 
 import com.jme.input.InputHandler;
 import com.jme.input.action.InputAction;
 import com.jme.input.action.InputActionEvent;
 import com.jme.math.Vector3f;
+import com.jme.scene.Node;
 import com.jme.scene.shape.AxisRods;
+import com.jme.system.DisplaySystem;
+import com.jmex.physics.PhysicsSpace;
 import com.jmex.physics.util.SimplePhysicsGame;
 
 public class TgosMain extends SimplePhysicsGame
@@ -22,30 +27,29 @@ public class TgosMain extends SimplePhysicsGame
 	private final Float MINPOWER = 100.0f;
 	private final Float MULTPOWER = 3f;
 
-	// Element
-	// private Coin theCoin = null;
-
 	@Override
 	protected void simpleInitGame()
 	{
 		// First, for debug, we set the axis.
 		showAxisRods();
-		
+
 		// We start creating the room
 		Room room = new Room(getPhysicsSpace(), rootNode, display);
 
 		Sapo sapo = new Sapo(getPhysicsSpace(), rootNode, display);
-
-		initActions();
+		
+		Coin coin = new Coin(getPhysicsSpace(), rootNode, display);
+		
+		initActions(coin);
 	}
 
-	private void initActions()
+	private void initActions(Coin coin)
 	{
 
-		// Thw throw coin action.
+		// The throwed coin action.
 		final int LEFTMOUSEBUTTON = 0;
-		input.addAction(new ThrowCoinAction(), InputHandler.DEVICE_MOUSE, LEFTMOUSEBUTTON,
-			InputHandler.AXIS_NONE, false);
+		input.addAction(new ThrowCoinAction(coin),
+			InputHandler.DEVICE_MOUSE, LEFTMOUSEBUTTON, InputHandler.AXIS_NONE, false);
 
 	}
 
@@ -55,12 +59,19 @@ public class TgosMain extends SimplePhysicsGame
 		AxisRods ar = new AxisRods("rods", true, 0.5f);
 		rootNode.attachChild(ar);
 	}
-	
+
 	/*
 	 * The Action Clases.
 	 */
 	private class ThrowCoinAction extends InputAction
 	{
+		private Coin theCoin = null;
+
+		public ThrowCoinAction(Coin theCoin)
+		{
+			this.theCoin = theCoin;
+		}
+
 		private Date initMoment = null;
 
 		/**
@@ -92,10 +103,11 @@ public class TgosMain extends SimplePhysicsGame
 
 				// We must scale the power to our scale, between min and max power.
 				Float power = (finishMoment.getTime() - initMoment.getTime()) * MULTPOWER;
-				
-				//Debug
-				System.out.println("La resta de tiempos es: " + (finishMoment.getTime() - initMoment.getTime()));
-				
+
+				// Debug
+				System.out.println("La resta de tiempos es: "
+					+ (finishMoment.getTime() - initMoment.getTime()));
+
 				if (power < MINPOWER)
 				{
 					power = MINPOWER;
@@ -107,7 +119,9 @@ public class TgosMain extends SimplePhysicsGame
 				Vector3f shootOrigin = cam.getLocation();
 				Vector3f shootDirection = cam.getDirection();
 				Vector3f shootForce = shootDirection.mult(power);
-				Coin coin = new Coin(getPhysicsSpace(), rootNode, display, shootOrigin, shootForce);
+
+				// Create the shoot!!!
+				theCoin.setCoinShoot(shootOrigin, shootForce);
 
 				// DEBUG
 				System.out.println("POWA: " + power);

@@ -30,7 +30,14 @@ public class Room extends SapoElement
 	private Float thick = 1.5f;
 	
 	// How far is the front wall
-	private Float far = 200.0f;
+	private Float far = 120.0f;
+	
+	// Lights
+	private Float lightHigh = size - 4.0f;
+	private Float lightFar = far - 20.0f;
+	
+	
+	private float distanceFromFloor = 27.0f;
 	
 	
 	public Room(PhysicsSpace theSpace, Node rootNode, DisplaySystem disp)
@@ -45,31 +52,32 @@ public class Room extends SapoElement
 //		//Now we use the boxes of JME, that are trimeshes. We start with the front Wall. 
 		final Box frontWallBox = new Box("frontWall", new Vector3f(), size, size, thick);
 		room.attachChild(frontWallBox);
-		frontWallBox.getLocalTranslation().set(new Vector3f(0, 0, -far));
-		color(frontWallBox, new ColorRGBA(102.0f / 255f, 51.0f / 255.0f , 255.0f / 255.0f, 1.0f));
+		frontWallBox.getLocalTranslation().set(new Vector3f(0, distanceFromFloor, -far));
+//		color(frontWallBox, new ColorRGBA(102.0f / 255f, 51.0f / 255.0f , 255.0f / 255.0f, 1.0f));
+		applyTextures(frontWallBox, "models/itbaLogo.jpg");
 
 //		// The floor
 		final Box floorBox = new Box("floor", new Vector3f(), size, thick, far);
 		room.attachChild(floorBox);
-		floorBox.getLocalTranslation().set(new Vector3f(0, -size, 0));
+		floorBox.getLocalTranslation().set(new Vector3f(0, -size + distanceFromFloor, 0));
 		color(floorBox, new ColorRGBA(102.0f / 255f, 51.0f / 255.0f , 0.0f, 1.0f));
 
 //		// The roof
 		final Box roofBox = new Box("roof", new Vector3f(), size, thick, far);
 		room.attachChild(roofBox);
-		roofBox.getLocalTranslation().set(new Vector3f(0, size, 0));
+		roofBox.getLocalTranslation().set(new Vector3f(0, size + distanceFromFloor, 0));
 		color(roofBox, new ColorRGBA(102.0f / 255f, 51.0f / 255.0f , 0.0f, 1.0f));
 		
 //		// The right wall
 		final Box rightWallBox = new Box("rightWall", new Vector3f(), thick, size, far);
 		room.attachChild(rightWallBox);
-		rightWallBox.getLocalTranslation().set(new Vector3f(size, 0, 0));
+		rightWallBox.getLocalTranslation().set(new Vector3f(size, distanceFromFloor, 0));
 		color(rightWallBox, new ColorRGBA(102.0f / 255f, 51.0f / 255.0f , 255.0f / 255.0f, 1.0f));
 		
 //		// The left wall
 		final Box leftWallBox = new Box("leftWall", new Vector3f(), thick, size, far);
 		room.attachChild(leftWallBox);
-		leftWallBox.getLocalTranslation().set(new Vector3f(-size, 0, 0));
+		leftWallBox.getLocalTranslation().set(new Vector3f(-size, distanceFromFloor, 0));
 		color(leftWallBox, new ColorRGBA(102.0f / 255f, 51.0f / 255.0f , 255.0f / 255.0f, 1.0f));
 		
 		room.setModelBound(new BoundingBox());
@@ -97,19 +105,28 @@ public class Room extends SapoElement
 	private void turnOnTheLights()
 	{
 		// Set up a basic Point light, that illuminates in all direction.
-		PointLight light = new PointLight();
-		light.setDiffuse(new ColorRGBA(0.9f, 0.9f, 0.9f, 1.0f));
-//		light.setAmbient(new ColorRGBA(0.5f, 0.0f, 0.0f, 1.0f));
-		light.setLocation(new Vector3f());
-		light.setEnabled(true);
+		PointLight lightFront = new PointLight();
+		lightFront.setDiffuse(new ColorRGBA(0.9f, 0.9f, 0.9f, 1.0f));
+		lightFront.setLocation(new Vector3f(0, lightHigh, -lightFar));
+		lightFront.setEnabled(true);
 
+		PointLight lightCenter = new PointLight();
+		lightCenter.setDiffuse(new ColorRGBA(0.9f, 0.9f, 0.9f, 1.0f));
+		lightCenter.setLocation(new Vector3f(0, lightHigh, 10));
+		lightCenter.setEnabled(true);
+		
+		PointLight lightBack = new PointLight();
+		lightBack.setDiffuse(new ColorRGBA(0.9f, 0.9f, 0.9f, 1.0f));
+		lightCenter.setLocation(new Vector3f(0, lightHigh, lightFar));
+		lightBack.setEnabled(true);
+		
 		/** Attach the light to a lightState and the lightState to rootNode. */
 		LightState lightState = DisplaySystem.getDisplaySystem().getRenderer().createLightState();
-		lightState.attach(light);
+		lightState.attach(lightFront);
+//		lightState.attach(lightCenter);
+		lightState.attach(lightBack);
 		lightState.setTwoSidedLighting(true);
 		lightState.setEnabled(true);
 		rootNode.setRenderState(lightState);
 	}
-	
-	
 }
