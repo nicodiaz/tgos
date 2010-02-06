@@ -65,25 +65,25 @@ public class TgosMain extends SimplePhysicsGame
 	@Override
 	protected void simpleUpdate()
 	{
-		
+
 		// This if is to check if the coin is quiet or not.
 		if (coinInMovement)
 		{
 			lastTime = new Date();
 			long timeDiff = lastTime.getTime() - initTime.getTime();
-			
+
 			if (Math.floor(timeDiff / 1000.0) > 1.3)
 			{
 				initTime = lastTime;
 				// A second have passed. We must verify the distances.
 				currentVelocity = coin.getVelocity(null);
-				System.out.println("DEBUG: Vector Velocidad: " + currentVelocity.x + ", " + currentVelocity.y + ", " + currentVelocity.z);
-				System.out.println("Distancia: " + currentVelocity.distance(new Vector3f()));
+				System.out.println("DEBUG: Vector Velocidad: " + currentVelocity.x + ", "
+					+ currentVelocity.y + ", " + currentVelocity.z);
+				System.out.println("DEBUG: Distancia: " + currentVelocity.distance(new Vector3f()));
 				if (isCoinStopped())
 				{
 					coinInMovement = false;
 					System.out.println("DEBUG: Se detuvo la moneda papaaaaaaa");
-					
 				}
 			}
 			else
@@ -93,7 +93,6 @@ public class TgosMain extends SimplePhysicsGame
 		}
 	}
 
-	
 	private boolean isCoinStopped()
 	{
 		if (currentVelocity.distance(Vector3f.ZERO) == 0.0f)
@@ -101,12 +100,10 @@ public class TgosMain extends SimplePhysicsGame
 			// This is to avoid a problem with JMEPhysics
 			return false;
 		}
-		
-		return (currentVelocity.distance(Vector3f.ZERO) < 0.01? true:false);
+
+		return (currentVelocity.distance(Vector3f.ZERO) < 0.01 ? true : false);
 	}
-	
-	
-	
+
 	/*
 	 * The Action Clases.
 	 */

@@ -10,6 +10,7 @@ import com.jme.scene.state.LightState;
 import com.jme.system.DisplaySystem;
 import com.jmex.physics.PhysicsSpace;
 import com.jmex.physics.StaticPhysicsNode;
+import com.jmex.physics.material.Material;
 
 
 /**
@@ -55,6 +56,14 @@ public class Room extends SapoElement
 		frontWallBox.getLocalTranslation().set(new Vector3f(0, distanceFromFloor, -far));
 //		color(frontWallBox, new ColorRGBA(102.0f / 255f, 51.0f / 255.0f , 255.0f / 255.0f, 1.0f));
 		applyTextures(frontWallBox, "models/itbaLogo.jpg");
+		
+		
+		final Box backWallBox = new Box("backWallBox", new Vector3f(), size, size, thick);
+		room.attachChild(backWallBox);
+		backWallBox.getLocalTranslation().set(new Vector3f(0, distanceFromFloor, far));
+//		color(backWallBox, new ColorRGBA(102.0f / 255f, 51.0f / 255.0f , 255.0f / 255.0f, 1.0f));
+		applyTextures(backWallBox, "models/itbaLogo.jpg");
+		
 
 //		// The floor
 		final Box floorBox = new Box("floor", new Vector3f(), size, thick, far);
@@ -83,6 +92,7 @@ public class Room extends SapoElement
 		room.setModelBound(new BoundingBox());
 		room.updateModelBound();
 		
+		room.setMaterial(Material.CONCRETE);
 		room.generatePhysicsGeometry();
 		
 		turnOnTheLights();
