@@ -77,4 +77,15 @@ public class Coin extends SapoElement implements Cloneable
 		coinDynamicNode.clearDynamics();
 		coinDynamicNode.addForce(force);
 	}
+	
+	public Vector3f getLocation()
+	{
+		return coinDynamicNode.getLocalTranslation();
+	}
+	
+	public Vector3f getVelocity(Vector3f storeVector)
+	{
+		return coinDynamicNode.getLinearVelocity(storeVector);
+	}
+	
 }
