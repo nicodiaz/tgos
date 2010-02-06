@@ -1,25 +1,27 @@
 package game.core;
 
 import game.elements.Coin;
-import game.elements.CoinFactory;
 import game.elements.Room;
 import game.elements.Sapo;
 
 import java.util.Date;
-import java.util.logging.Logger;
 
 import com.jme.input.InputHandler;
 import com.jme.input.action.InputAction;
 import com.jme.input.action.InputActionEvent;
 import com.jme.math.Vector3f;
-import com.jme.scene.Node;
 import com.jme.scene.shape.AxisRods;
-import com.jme.system.DisplaySystem;
-import com.jmex.physics.PhysicsSpace;
 import com.jmex.physics.util.SimplePhysicsGame;
 
 public class TgosMain extends SimplePhysicsGame
 {
+	// Update varibales
+	private boolean coinInMovement = false;
+	private Date initTime = new Date(); // the time that start the shoot
+	private Date lastTime = null;
+	private Vector3f currentVelocity = new Vector3f();
+
+	Coin coin = null;
 
 	// actions variables
 	private boolean playerIsThrowing = false;
@@ -37,19 +39,19 @@ public class TgosMain extends SimplePhysicsGame
 		Room room = new Room(getPhysicsSpace(), rootNode, display);
 
 		Sapo sapo = new Sapo(getPhysicsSpace(), rootNode, display);
-		
-		Coin coin = new Coin(getPhysicsSpace(), rootNode, display);
-		
-		initActions(coin);
+
+		coin = new Coin(getPhysicsSpace(), rootNode, display);
+
+		initActions();
 	}
 
-	private void initActions(Coin coin)
+	private void initActions()
 	{
 
 		// The throwed coin action.
 		final int LEFTMOUSEBUTTON = 0;
-		input.addAction(new ThrowCoinAction(coin),
-			InputHandler.DEVICE_MOUSE, LEFTMOUSEBUTTON, InputHandler.AXIS_NONE, false);
+		input.addAction(new ThrowCoinAction(coin), InputHandler.DEVICE_MOUSE, LEFTMOUSEBUTTON,
+			InputHandler.AXIS_NONE, false);
 
 	}
 
@@ -60,6 +62,51 @@ public class TgosMain extends SimplePhysicsGame
 		rootNode.attachChild(ar);
 	}
 
+	@Override
+	protected void simpleUpdate()
+	{
+		
+		// This if is to check if the coin is quiet or not.
+		if (coinInMovement)
+		{
+			lastTime = new Date();
+			long timeDiff = lastTime.getTime() - initTime.getTime();
+			
+			if (Math.floor(timeDiff / 1000.0) > 1.3)
+			{
+				initTime = lastTime;
+				// A second have passed. We must verify the distances.
+				currentVelocity = coin.getVelocity(null);
+				System.out.println("DEBUG: Vector Velocidad: " + currentVelocity.x + ", " + currentVelocity.y + ", " + currentVelocity.z);
+				System.out.println("Distancia: " + currentVelocity.distance(new Vector3f()));
+				if (isCoinStopped())
+				{
+					coinInMovement = false;
+					System.out.println("DEBUG: Se detuvo la moneda papaaaaaaa");
+					
+				}
+			}
+			else
+			{
+				// Nothing to do, we must wait a delta
+			}
+		}
+	}
+
+	
+	private boolean isCoinStopped()
+	{
+		if (currentVelocity.distance(Vector3f.ZERO) == 0.0f)
+		{
+			// This is to avoid a problem with JMEPhysics
+			return false;
+		}
+		
+		return (currentVelocity.distance(Vector3f.ZERO) < 0.01? true:false);
+	}
+	
+	
+	
 	/*
 	 * The Action Clases.
 	 */
@@ -120,8 +167,13 @@ public class TgosMain extends SimplePhysicsGame
 				Vector3f shootDirection = cam.getDirection();
 				Vector3f shootForce = shootDirection.mult(power);
 
-				// Create the shoot!!!
+				/*
+				 * Create the shoot!!! Ww must set the shoot itself, the time and the
+				 * place where happened.
+				 */
 				theCoin.setCoinShoot(shootOrigin, shootForce);
+				coinInMovement = true;
+				initMoment = new Date();
 
 				// DEBUG
 				System.out.println("POWA: " + power);
