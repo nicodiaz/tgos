@@ -3,8 +3,14 @@
  */
 package game.elements;
 
+import game.core.ModelLoader;
+
+import java.util.List;
+
+import com.jme.math.FastMath;
 import com.jme.math.Vector3f;
 import com.jme.scene.Node;
+import com.jme.scene.Spatial;
 import com.jme.scene.shape.Box;
 import com.jme.system.DisplaySystem;
 import com.jmex.physics.PhysicsSpace;
@@ -26,7 +32,7 @@ public class SapoLittle extends SapoElement
 
 	// variables
 	private Float width = 0.7f;
-	private Float height = 0.4f;
+	private Float height = 0.3f;
 
 
 	private Float thick = 0.025f;
@@ -48,6 +54,9 @@ public class SapoLittle extends SapoElement
 		sapoLittleStaticNode.attachChild(ls_roof);
 		ls_roof.getLocalTranslation().set(new Vector3f(0, height, 0));
 		
+		// The sapo decoration
+		makeSapoDeco();
+		
 		// The right wall
 		final Box rightWall = new Box("rightWall", new Vector3f(), thick, height, width);
 		sapoLittleStaticNode.attachChild(rightWall);
@@ -59,12 +68,25 @@ public class SapoLittle extends SapoElement
 		leftWall.getLocalTranslation().set(new Vector3f(-width, 0, 0));
 		
 		sapoLittleStaticNode.setMaterial(Material.IRON);
+		applyTextures(sapoLittleStaticNode, "models/Material.jpg");
 		
 		sapoLittleStaticNode.generatePhysicsGeometry();
 		sapoLittleStaticNode.getLocalTranslation().set(origin);
 	}
 
+	private void makeSapoDeco()
+	{
+		Spatial sapoDecoPhysic = null;
+		Node sapoDecoPhysicNode = (Node) ModelLoader.load3ds("models/frog.3ds");
+		List<Spatial> spatialList = ((Node) sapoDecoPhysicNode.getChild(0)).getChildren();
+		sapoDecoPhysic = spatialList.get(0);
 	
+		sapoDecoPhysic.getLocalScale().set(0.0014f, 0.0014f, 0.0014f);
+		sapoDecoPhysic.getLocalRotation().fromAngleNormalAxis(FastMath.PI / 2.0f, new Vector3f(-1, 0, 0));
+		sapoDecoPhysic.getLocalTranslation().set(new Vector3f(0, height, -width ));
+		sapoLittleStaticNode.attachChild(sapoDecoPhysic);
+		
+	}
 	public StaticPhysicsNode getSapoLittleStaticNode()
 	{
 		return sapoLittleStaticNode;

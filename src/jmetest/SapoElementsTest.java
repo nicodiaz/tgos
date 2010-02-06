@@ -1,6 +1,6 @@
 package jmetest;
 
-import game.elements.Coin;
+import game.elements.SapoLittle;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import com.jme.math.Vector3f;
 import com.jme.scene.Spatial;
 import com.jme.util.export.binary.BinaryImporter;
 import com.jme.util.resource.ResourceLocatorTool;
@@ -76,11 +77,14 @@ public class SapoElementsTest extends SimplePhysicsGame
 		// final Box b = new Box("box", new Vector3f(), 20, 0.20f, 20f);
 		// staticNode.attachChild(b);
 
-//		SapoLittle theSapo = new SapoLittle(getPhysicsSpace(), rootNode, display, new Vector3f());
-//		StaticPhysicsNode lsStaticNode = theSapo.getSapoLittleStaticNode();
+		SapoLittle theSapo = new SapoLittle(getPhysicsSpace(), rootNode, display, new Vector3f());
+		StaticPhysicsNode lsStaticNode = theSapo.getSapoLittleStaticNode();
+		
 		staticNode.generatePhysicsGeometry();
 		
-		Coin coin = new Coin(getPhysicsSpace(), rootNode, display);
+		
+		
+//		Coin coin = new Coin(getPhysicsSpace(), rootNode, display);
 		
 
 		// DynamicPhysicsNode dynamicNode = getPhysicsSpace().createDynamicNode();

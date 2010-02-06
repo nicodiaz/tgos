@@ -5,22 +5,17 @@ import game.core.ModelLoader;
 import java.util.List;
 
 import com.jme.bounding.BoundingBox;
-import com.jme.image.Texture;
 import com.jme.math.Vector3f;
-import com.jme.renderer.ColorRGBA;
 import com.jme.scene.Node;
 import com.jme.scene.Spatial;
-import com.jme.scene.Spatial.TextureCombineMode;
-import com.jme.scene.state.TextureState;
 import com.jme.system.DisplaySystem;
-import com.jme.util.TextureManager;
 import com.jmex.physics.DynamicPhysicsNode;
 import com.jmex.physics.PhysicsSpace;
 import com.jmex.physics.material.Material;
 
 // TODO: Change the 3ds model for a jme primitive (cylinder)
 //TODO: Make a AbstractCoin class where the PhysicNode exists, maybe solve the black screen problem
-public class Coin extends SapoElement implements Cloneable
+public class Coin extends SapoElement
 {
 	private DynamicPhysicsNode coinDynamicNode = null;
 	private Spatial physicCoin = null;
