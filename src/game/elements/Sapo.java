@@ -59,8 +59,28 @@ public class Sapo extends SapoElement
 	private Integer middleBoxesFloorIndex = 0;
 	private Integer upperBoxesFloorIndex = 0;
 	
+	// the separation between boxes.
+	private Float boxesSeparation = (2 * sapoWidth) / 3.0f;
+	
 	// And the location of this little sapo, for the camera on it
 	SapoLittle sapoLittle = null;
+	
+	
+	/**
+	 *  This Enum is to identify every box. Remember, the LOWER_MIDDLE is the SAPO box.
+	 */
+	public enum Boxes
+	{
+		LOWER, MIDDLE, UPPER,
+		LEFT, RIGHT,
+		LOWER_LEFT, SAPO, LOWER_RIGHT,
+		MIDDLE_LEFT, MIDDLE_MIDDLE, MIDDLE_RIGHT,
+		UPPER_LEFT, UPPER_MIDDLE, UPPER_RIGHT,
+		OUT //This is when no box was touched.
+	}
+	
+	
+	
 
 	public Sapo(PhysicsSpace theSpace, Node rootNode, DisplaySystem disp)
 	{
@@ -92,7 +112,6 @@ public class Sapo extends SapoElement
 	{
 		this(theSpace, rootNode, disp);
 		sapoStaticNode.getLocalTranslation().set(center);
-
 	}
 
 	/*
@@ -119,14 +138,15 @@ public class Sapo extends SapoElement
 			+ boxesLength);
 		sapoStaticNode.attachChild(rightSapoWall);
 
-		Float incX = (2 * sapoWidth) / 3.0f;
+//		Float incX = (2 * sapoWidth) / 3.0f;
+		Float incX = boxesSeparation;
 		// The inner right of the box.
 		final Box innerRightSapoWall = new Box("innerRightSapoWall", new Vector3f(sapoWidth - incX,
 			0, -(sapoZMid - boxesLength)), boxesThick, sapoHeight, ((sapoBack - sapoFront) / 2.0f)
 			+ boxesLength);
 		sapoStaticNode.attachChild(innerRightSapoWall);
 
-		// The inner right of the box.
+		// The inner left of the box.
 		final Box innerLeftSapoWall = new Box("innerLeftSapoWall", new Vector3f(-sapoWidth + incX,
 			0, -(sapoZMid - boxesLength)), boxesThick, sapoHeight, ((sapoBack - sapoFront) / 2.0f)
 			+ boxesLength);
@@ -369,23 +389,60 @@ public class Sapo extends SapoElement
 		sl_staticNode.getLocalScale().set(littleSapoScale, littleSapoScale, littleSapoScale);
 	}
 
-	public boolean isTouching(Spatial anotherObject)
+	/**
+	 * This method is to recover the points that the player have done.
+	 * @param coin The throwed coin.
+	 * @return The number indication the points. If no point was made, then return 0.
+	 */
+	public Integer getPoints(Coin coin)
 	{
-		BoundingCollisionResults collisionResults = new BoundingCollisionResults();
-
-		// We must check if the lower boxes is touching
-		// sapoStaticNode.getChild(9).findCollisions(anotherObject, collisionResults);
-		// System.out.println("DEBUG: El nro de colisiones (con la caja de abajo) es: " +
-		// collisionResults.getNumber());
-		//		
-		// sapoStaticNode.getChild(11).findCollisions(anotherObject, collisionResults);
-		// System.out.println("DEBUG: El nro de colisiones (con la caja del medio) es: " +
-		// collisionResults.getNumber());
-		//		
-		// sapoStaticNode.getChild(13).findCollisions(anotherObject, collisionResults);
-		// System.out.println("DEBUG: El nro de colisiones (con la caja de arriba) es: " +
-		// collisionResults.getNumber());
-
+		Boxes boxTouched = isTouching(coin);
+		Integer points = 0;
+		
+		switch (boxTouched)
+		{
+		case LOWER_LEFT:
+			points = 100;
+			break;
+		case SAPO:
+			points = 150;
+			break;
+		case LOWER_RIGHT:
+			points = 100;
+			break;
+		case MIDDLE_LEFT:
+			points = 80;
+			break;
+		case MIDDLE_MIDDLE:
+			points = 100;
+			break;
+		case MIDDLE_RIGHT:
+			points = 80;
+			break;
+		case UPPER_LEFT:
+			points = 60;
+			break;
+		case UPPER_MIDDLE:
+			points = 80;
+			break;
+		case UPPER_RIGHT:
+			points = 60;
+			break;
+		case OUT:
+		default:
+			points = 0;
+			break;
+		}
+		
+		return points;
+	}
+	
+	
+	public Boxes isTouching(Coin coin)
+	{
+		Spatial anotherObject = coin.getPhysicCoin();
+		Boxes result = null;
+		
 		/*
 		 * The engine have a bug. If i use the getChild with names and detect collisions,
 		 * the method is not working. The same happen if I use the node. The only way to
@@ -396,20 +453,87 @@ public class Sapo extends SapoElement
 
 		if (sapoStaticNode.getChild(lowerBoxesFloorIndex).hasCollision(anotherObject, false))
 		{
-			System.out.println("DEBUG: Tocó la caja de abajo");
+			result = getTouchedBox(coin);
+			switch (result)
+			{
+				case LEFT:
+					return Boxes.LOWER_LEFT;
+				case MIDDLE:
+					return Boxes.SAPO;
+				case RIGHT:
+					return Boxes.LOWER_RIGHT;
+				default:
+					return Boxes.OUT;
+			}
 		}
 
 		if (sapoStaticNode.getChild(middleBoxesFloorIndex).hasCollision(anotherObject, false))
 		{
-			System.out.println("DEBUG: Tocó la caja del medio");
+			result = getTouchedBox(coin);
+			switch (result)
+			{
+				case LEFT:
+					return Boxes.MIDDLE_LEFT;
+				case MIDDLE:
+					return Boxes.MIDDLE_MIDDLE;
+				case RIGHT:
+					return Boxes.MIDDLE_RIGHT;
+				default:
+					return Boxes.OUT;
+			}
 		}
 
 		if (sapoStaticNode.getChild(upperBoxesFloorIndex).hasCollision(anotherObject, false))
 		{
-			System.out.println("DEBUG: Tocó la caja de arriba");
+			result = getTouchedBox(coin);
+			switch (result)
+			{
+				case LEFT:
+					return Boxes.UPPER_LEFT;
+				case MIDDLE:
+					return Boxes.UPPER_MIDDLE;
+				case RIGHT:
+					return Boxes.UPPER_RIGHT;
+				default:
+					return Boxes.OUT;
+			}
 		}
-
-		return true;
+		
+		return Boxes.OUT;
+	}
+	
+	private Boxes getTouchedBox(Coin coin)
+	{
+		Vector3f coinPosition = coin.getLocation();
+		Vector3f start = new Vector3f(-sapoWidth, 0, 0);
+		Vector3f limit = start.add(boxesSeparation, 0, 0);
+		
+		// Now, we must see wich box has touched. we start with the leftmost box.
+		if (coinPosition.x > start.x && coinPosition.x < limit.x)
+		{
+			System.out.println("DEBUG: Tocó la caja de la izquierda");
+			return Boxes.LEFT;
+		}
+		
+		// The middle box
+		start = limit;
+		limit = limit.add(boxesSeparation, 0, 0);
+		if (coinPosition.x > start.x && coinPosition.x < limit.x)
+		{
+			System.out.println("DEBUG: Tocó la caja del medio");
+			return Boxes.MIDDLE;
+		}
+		
+		// If the cases before fails, is the right box
+		start = limit;
+		limit = limit.add(boxesSeparation, 0, 0);
+		if (coinPosition.x > start.x && coinPosition.x < limit.x)
+		{
+			System.out.println("DEBUG: Tocó la caja de la derecha");
+			return Boxes.RIGHT;
+		}
+		
+		return Boxes.OUT;
 	}
 	
 	public Vector3f getLittleSapoPosition()

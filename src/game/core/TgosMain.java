@@ -107,7 +107,7 @@ public class TgosMain extends SimplePhysicsGame
 			if (Math.floor(timeDiff / 1000.0) > 1.3)
 			{
 				initTime = lastTime;
-				// A second have passed. We must verify the distances.
+				// A second have passed. We must verify the velocities.
 				currentVelocity = coin.getVelocity(null);
 				System.out.println("DEBUG: Vector Velocidad: " + currentVelocity.x + ", "
 					+ currentVelocity.y + ", " + currentVelocity.z);
@@ -115,7 +115,6 @@ public class TgosMain extends SimplePhysicsGame
 				if (isCoinStopped())
 				{
 					coinInMovement = false;
-					System.out.println("DEBUG: Se detuvo la moneda papaaaaaaa");
 
 					if (cameraOption != CameraOptions.FreeStyleCamera)
 					{
@@ -125,10 +124,14 @@ public class TgosMain extends SimplePhysicsGame
 					}
 					
 					// we must check if is touching a box
-					if (isTouchingABox())
-					{
-						points = getPoints();
-					}
+					System.out.println("DEBUG: HIZO " + sapo.getPoints(coin) + " PUNTOS");
+//					sapo.getPoints(coin);
+					
+					// DELETE THIS BEFORE
+//					if (sapo.isTouching(coin))
+//					{
+//						points = getPoints();
+//					}
 				}
 			}
 			else
@@ -136,11 +139,6 @@ public class TgosMain extends SimplePhysicsGame
 				// Nothing to do, we must wait a delta
 			}
 		}
-	}
-
-	private boolean isTouchingABox()
-	{
-		return sapo.isTouching(coin.getPhysicCoin());
 	}
 
 	private Integer getPoints()
