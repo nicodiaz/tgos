@@ -4,12 +4,18 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.jme.bounding.BoundingBox;
 import com.jme.image.Texture;
+import com.jme.intersection.BoundingCollisionResults;
+import com.jme.intersection.CollisionResults;
 import com.jme.math.FastMath;
 import com.jme.math.Vector3f;
+import com.jme.scene.Geometry;
 import com.jme.scene.Node;
+import com.jme.scene.Spatial;
 import com.jme.scene.shape.Box;
 import com.jme.scene.state.TextureState;
 import com.jme.system.DisplaySystem;
@@ -28,7 +34,6 @@ import com.jmex.physics.material.Material;
  */
 public class Sapo extends SapoElement
 {
-	private StaticPhysicsNode sapoStaticNode = null;
 
 	// Wall variables
 	private Float sapoWidth = 10.0f;
@@ -57,6 +62,16 @@ public class Sapo extends SapoElement
 	// Other measures
 	private Float backWallHeight = 3.0f;
 	private Float littleSapoScale = 3.0f;
+
+	/*
+	 * Now, begin the internal Sapo variables, to work with the class
+	 */
+	private StaticPhysicsNode sapoStaticNode = null;
+
+	// For a performance purpose, we must save the index number of this childs.
+	private Integer lowerBoxesFloorIndex = 0;
+	private Integer middleBoxesFloorIndex = 0;
+	private Integer upperBoxesFloorIndex = 0;
 
 	public Sapo(PhysicsSpace theSpace, Node rootNode, DisplaySystem disp)
 	{
@@ -187,6 +202,7 @@ public class Sapo extends SapoElement
 		final Box lowerBoxesFloor = new Box("lowerBoxesFloor", lowerPoint, sapoWidth, boxesThick,
 			boxesLength);
 		sapoStaticNode.attachChild(lowerBoxesFloor);
+		lowerBoxesFloorIndex = sapoStaticNode.getChildIndex(lowerBoxesFloor);
 		final Box lowerBoxesFront = new Box("lowerBoxesFront", lowerPoint.add(0, boxesHigh,
 			boxesLength), sapoWidth, boxesHigh, boxesThick);
 		sapoStaticNode.attachChild(lowerBoxesFront);
@@ -199,6 +215,7 @@ public class Sapo extends SapoElement
 		final Box middleBoxesFloor = new Box("middleBoxesFloor", middlePoint, sapoWidth,
 			boxesThick, boxesLength);
 		sapoStaticNode.attachChild(middleBoxesFloor);
+		middleBoxesFloorIndex = sapoStaticNode.getChildIndex(middleBoxesFloor);
 		final Box middleBoxesFront = new Box("middleBoxesFront", middlePoint.add(0, boxesHigh,
 			boxesLength), sapoWidth, boxesHigh, boxesThick);
 		sapoStaticNode.attachChild(middleBoxesFront);
@@ -210,9 +227,18 @@ public class Sapo extends SapoElement
 		final Box upperBoxesFloor = new Box("upperBoxesFloor", upperPoint, sapoWidth, boxesThick,
 			boxesLength);
 		sapoStaticNode.attachChild(upperBoxesFloor);
+		upperBoxesFloorIndex = sapoStaticNode.getChildIndex(upperBoxesFloor);
 		final Box upperBoxesFront = new Box("upperBoxesFront", upperPoint.add(0, boxesHigh,
 			boxesLength), sapoWidth, boxesHigh, boxesThick);
 		sapoStaticNode.attachChild(upperBoxesFront);
+
+		// DEBUG DELETE ME
+		System.out.println("DEBUG: lowerBoxesFloor tiene numero: "
+			+ sapoStaticNode.getChildIndex(lowerBoxesFloor));
+		System.out.println("DEBUG: middleBoxesFloor tiene numero: "
+			+ sapoStaticNode.getChildIndex(middleBoxesFloor));
+		System.out.println("DEBUG: upperBoxesFloor tiene numero: "
+			+ sapoStaticNode.getChildIndex(upperBoxesFloor));
 
 	}
 
@@ -352,5 +378,48 @@ public class Sapo extends SapoElement
 		sl_staticNode.getLocalTranslation().set(0, sapoHeight + (littleSapoScale * sl.getHeight()),
 			-(sapoBack - littleSapoScale * sl.getWidth() * 1.2f));
 		sl_staticNode.getLocalScale().set(littleSapoScale, littleSapoScale, littleSapoScale);
+	}
+
+	public boolean isTouching(Spatial anotherObject)
+	{
+		BoundingCollisionResults collisionResults = new BoundingCollisionResults();
+
+		// We must check if the lower boxes is touching
+		// sapoStaticNode.getChild(9).findCollisions(anotherObject, collisionResults);
+		// System.out.println("DEBUG: El nro de colisiones (con la caja de abajo) es: " +
+		// collisionResults.getNumber());
+		//		
+		// sapoStaticNode.getChild(11).findCollisions(anotherObject, collisionResults);
+		// System.out.println("DEBUG: El nro de colisiones (con la caja del medio) es: " +
+		// collisionResults.getNumber());
+		//		
+		// sapoStaticNode.getChild(13).findCollisions(anotherObject, collisionResults);
+		// System.out.println("DEBUG: El nro de colisiones (con la caja de arriba) es: " +
+		// collisionResults.getNumber());
+
+		/*
+		 * The engine have a bug. If i use the getChild with names and detect collisions,
+		 * the method is not working. The same happen if I use the node. The only way to
+		 * have this working, is recovering the child by the integer. Also, for a
+		 * performance issue, is better recover the child by the index, because is O(1).
+		 * Otherwise, has O(N).
+		 */
+
+		if (sapoStaticNode.getChild(lowerBoxesFloorIndex).hasCollision(anotherObject, false))
+		{
+			System.out.println("DEBUG: Tocó la caja de abajo");
+		}
+
+		if (sapoStaticNode.getChild(middleBoxesFloorIndex).hasCollision(anotherObject, false))
+		{
+			System.out.println("DEBUG: Tocó la caja del medio");
+		}
+
+		if (sapoStaticNode.getChild(upperBoxesFloorIndex).hasCollision(anotherObject, false))
+		{
+			System.out.println("DEBUG: Tocó la caja de arriba");
+		}
+
+		return true;
 	}
 }
