@@ -69,25 +69,30 @@ public class Room extends SapoElement
 		final Box floorBox = new Box("floor", new Vector3f(), size, thick, far);
 		room.attachChild(floorBox);
 		floorBox.getLocalTranslation().set(new Vector3f(0, -size + distanceFromFloor, 0));
-		color(floorBox, new ColorRGBA(102.0f / 255f, 51.0f / 255.0f , 0.0f, 1.0f));
+//		color(floorBox, new ColorRGBA(102.0f / 255f, 51.0f / 255.0f , 0.0f, 1.0f));
+		applyTextures(floorBox, "models/concreteTexture.jpg");
+		
 
 //		// The roof
 		final Box roofBox = new Box("roof", new Vector3f(), size, thick, far);
 		room.attachChild(roofBox);
 		roofBox.getLocalTranslation().set(new Vector3f(0, size + distanceFromFloor, 0));
-		color(roofBox, new ColorRGBA(102.0f / 255f, 51.0f / 255.0f , 0.0f, 1.0f));
+//		color(roofBox, new ColorRGBA(102.0f / 255f, 51.0f / 255.0f , 0.0f, 1.0f));
+		applyTextures(roofBox, "models/roofTexture.jpg");
 		
 //		// The right wall
 		final Box rightWallBox = new Box("rightWall", new Vector3f(), thick, size, far);
 		room.attachChild(rightWallBox);
 		rightWallBox.getLocalTranslation().set(new Vector3f(size, distanceFromFloor, 0));
-		color(rightWallBox, new ColorRGBA(102.0f / 255f, 51.0f / 255.0f , 255.0f / 255.0f, 1.0f));
+//		color(rightWallBox, new ColorRGBA(102.0f / 255f, 51.0f / 255.0f , 255.0f / 255.0f, 1.0f));
+		applyTextures(rightWallBox, "models/wallTexture.jpg");
 		
 //		// The left wall
 		final Box leftWallBox = new Box("leftWall", new Vector3f(), thick, size, far);
 		room.attachChild(leftWallBox);
 		leftWallBox.getLocalTranslation().set(new Vector3f(-size, distanceFromFloor, 0));
-		color(leftWallBox, new ColorRGBA(102.0f / 255f, 51.0f / 255.0f , 255.0f / 255.0f, 1.0f));
+//		color(leftWallBox, new ColorRGBA(102.0f / 255f, 51.0f / 255.0f , 255.0f / 255.0f, 1.0f));
+		applyTextures(leftWallBox, "models/wallTexture.jpg");
 		
 		room.setModelBound(new BoundingBox());
 		room.updateModelBound();
