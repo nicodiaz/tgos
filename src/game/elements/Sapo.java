@@ -58,6 +58,9 @@ public class Sapo extends SapoElement
 	private Integer lowerBoxesFloorIndex = 0;
 	private Integer middleBoxesFloorIndex = 0;
 	private Integer upperBoxesFloorIndex = 0;
+	
+	// And the location of this little sapo, for the camera on it
+	SapoLittle sapoLittle = null;
 
 	public Sapo(PhysicsSpace theSpace, Node rootNode, DisplaySystem disp)
 	{
@@ -358,11 +361,11 @@ public class Sapo extends SapoElement
 
 	private void makeLittleSapo()
 	{
-		SapoLittle sl = new SapoLittle(space, rootNode, display, new Vector3f());
-		StaticPhysicsNode sl_staticNode = sl.getSapoLittleStaticNode();
+		sapoLittle = new SapoLittle(space, rootNode, display, new Vector3f());
+		StaticPhysicsNode sl_staticNode = sapoLittle.getSapoLittleStaticNode();
 		sapoStaticNode.attachChild(sl_staticNode);
-		sl_staticNode.getLocalTranslation().set(0, sapoHeight + (littleSapoScale * sl.getHeight()),
-			-(sapoBack - littleSapoScale * sl.getWidth() * 1.2f));
+		sl_staticNode.getLocalTranslation().set(0, sapoHeight + (littleSapoScale * sapoLittle.getHeight()),
+			-(sapoBack - littleSapoScale * sapoLittle.getWidth() * 1.2f));
 		sl_staticNode.getLocalScale().set(littleSapoScale, littleSapoScale, littleSapoScale);
 	}
 
@@ -407,5 +410,10 @@ public class Sapo extends SapoElement
 		}
 
 		return true;
+	}
+	
+	public Vector3f getLittleSapoPosition()
+	{
+		return sapoLittle.getLocation();
 	}
 }
