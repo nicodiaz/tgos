@@ -28,6 +28,9 @@ public class SapoLittle extends SapoElement
 	
 	private StaticPhysicsNode sapoLittleStaticNode = null;
 	
+	// For perfomance purpose
+	private Spatial sapoDecoPhysic = null;
+	
 
 
 	// variables
@@ -54,8 +57,6 @@ public class SapoLittle extends SapoElement
 		sapoLittleStaticNode.attachChild(ls_roof);
 		ls_roof.getLocalTranslation().set(new Vector3f(0, height, 0));
 		
-		// The sapo decoration
-		makeSapoDeco();
 		
 		// The right wall
 		final Box rightWall = new Box("rightWall", new Vector3f(), thick, height, width);
@@ -70,13 +71,16 @@ public class SapoLittle extends SapoElement
 		sapoLittleStaticNode.setMaterial(Material.IRON);
 		applyTextures(sapoLittleStaticNode, "models/Material.jpg");
 		
+		
+		// The sapo decoration
+		makeSapoDeco();
+		
 		sapoLittleStaticNode.generatePhysicsGeometry();
 		sapoLittleStaticNode.getLocalTranslation().set(origin);
 	}
 
 	private void makeSapoDeco()
 	{
-		Spatial sapoDecoPhysic = null;
 		Node sapoDecoPhysicNode = (Node) ModelLoader.load3ds("models/frog.3ds");
 		List<Spatial> spatialList = ((Node) sapoDecoPhysicNode.getChild(0)).getChildren();
 		sapoDecoPhysic = spatialList.get(0);
@@ -85,8 +89,9 @@ public class SapoLittle extends SapoElement
 		sapoDecoPhysic.getLocalRotation().fromAngleNormalAxis(FastMath.PI / 2.0f, new Vector3f(-1, 0, 0));
 		sapoDecoPhysic.getLocalTranslation().set(new Vector3f(0, height, -width ));
 		sapoLittleStaticNode.attachChild(sapoDecoPhysic);
-		
 	}
+	
+	
 	public StaticPhysicsNode getSapoLittleStaticNode()
 	{
 		return sapoLittleStaticNode;
@@ -100,5 +105,10 @@ public class SapoLittle extends SapoElement
 	public Float getHeight()
 	{
 		return height;
+	}
+	
+	public Vector3f getLocation()
+	{
+		return sapoLittleStaticNode.getLocalTranslation();
 	}
 }

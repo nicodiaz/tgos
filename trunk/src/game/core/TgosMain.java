@@ -3,10 +3,12 @@ package game.core;
 import game.elements.Coin;
 import game.elements.Room;
 import game.elements.Sapo;
+import game.utils.CameraOptions;
 
 import java.util.Date;
 
 import com.jme.input.InputHandler;
+import com.jme.input.KeyInput;
 import com.jme.input.action.InputAction;
 import com.jme.input.action.InputActionEvent;
 import com.jme.math.Vector3f;
@@ -21,6 +23,7 @@ public class TgosMain extends SimplePhysicsGame
 	private Date lastTime = null;
 	private Vector3f currentVelocity = new Vector3f();
 	private Integer points = 0;
+	private CameraOptions cameraOption = CameraOptions.FreeStyleCamera;
 
 	// Global Elements
 	Coin coin = null;
@@ -56,6 +59,11 @@ public class TgosMain extends SimplePhysicsGame
 		input.addAction(new ThrowCoinAction(coin), InputHandler.DEVICE_MOUSE, LEFTMOUSEBUTTON,
 			InputHandler.AXIS_NONE, false);
 
+		// The camera choose
+		input.addAction(new ChangeCameraToFreeStyleAction(), InputHandler.DEVICE_KEYBOARD,
+			KeyInput.KEY_1, InputHandler.AXIS_NONE, false);
+		input.addAction(new ChangeCameraToSapoAction(), InputHandler.DEVICE_KEYBOARD,
+			KeyInput.KEY_2, InputHandler.AXIS_NONE, false);
 	}
 
 	private void showAxisRods()
@@ -72,6 +80,15 @@ public class TgosMain extends SimplePhysicsGame
 		// This if is to check if the coin is quiet or not.
 		if (coinInMovement)
 		{
+			// We must check if the cam is allright
+			if (!cam.getLocation().equals(sapo.getLittleSapoPosition())
+				&& cameraOption == CameraOptions.SapoCamera)
+			{
+				cam.getLocation().set(sapo.getLittleSapoPosition());
+				cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
+
+			}
+
 			lastTime = new Date();
 			long timeDiff = lastTime.getTime() - initTime.getTime();
 
@@ -87,10 +104,18 @@ public class TgosMain extends SimplePhysicsGame
 				{
 					coinInMovement = false;
 					System.out.println("DEBUG: Se detuvo la moneda papaaaaaaa");
+
+					if (cameraOption == CameraOptions.SapoCamera)
+					{
+						// We must restore the camera to the start point
+						cam.getLocation().set(Vector3f.ZERO);
+						cam.lookAt(sapo.getLittleSapoPosition(), Vector3f.UNIT_Y);
+					}
+					
 					// we must check if is touching a box
 					if (isTouchingABox())
 					{
-						points = getPoints();						
+						points = getPoints();
 					}
 				}
 			}
@@ -105,13 +130,13 @@ public class TgosMain extends SimplePhysicsGame
 	{
 		return sapo.isTouching(coin.getPhysicCoin());
 	}
+
 	private Integer getPoints()
 	{
-		
-		
-		
+
 		return 0;
 	}
+
 	private boolean isCoinStopped()
 	{
 		if (currentVelocity.distance(Vector3f.ZERO) == 0.0f)
@@ -184,7 +209,7 @@ public class TgosMain extends SimplePhysicsGame
 				Vector3f shootForce = shootDirection.mult(power);
 
 				/*
-				 * Create the shoot!!! Ww must set the shoot itself, the time and the
+				 * Create the shoot!!! We must set the shoot itself, the time and the
 				 * place where happened.
 				 */
 				theCoin.setCoinShoot(shootOrigin, shootForce);
@@ -213,6 +238,26 @@ public class TgosMain extends SimplePhysicsGame
 				 * System.out.println("Turno despues de disparar: " + turn);
 				 */
 			}
+		}
+	}
+
+	private class ChangeCameraToSapoAction extends InputAction
+	{
+
+		@Override
+		public void performAction(InputActionEvent evt)
+		{
+			cameraOption = CameraOptions.SapoCamera;
+		}
+	}
+
+	private class ChangeCameraToFreeStyleAction extends InputAction
+	{
+
+		@Override
+		public void performAction(InputActionEvent evt)
+		{
+			cameraOption = CameraOptions.FreeStyleCamera;
 		}
 	}
 }
