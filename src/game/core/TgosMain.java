@@ -6,6 +6,8 @@ import game.elements.Sapo;
 import game.utils.CameraOptions;
 
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.jme.input.InputHandler;
 import com.jme.input.KeyInput;
@@ -38,6 +40,7 @@ public class TgosMain extends SimplePhysicsGame
 	@Override
 	protected void simpleInitGame()
 	{
+		Logger.getLogger("").log(Level.WARNING, "Cargando Juego. Por favor espere...");
 		// First, for debug, we set the axis.
 		showAxisRods();
 
@@ -49,6 +52,7 @@ public class TgosMain extends SimplePhysicsGame
 		coin = new Coin(getPhysicsSpace(), rootNode, display);
 
 		initActions();
+		Logger.getLogger("").log(Level.WARNING, "Juego cargado. Enjoy!");
 	}
 
 	private void initActions()
@@ -64,6 +68,10 @@ public class TgosMain extends SimplePhysicsGame
 			KeyInput.KEY_1, InputHandler.AXIS_NONE, false);
 		input.addAction(new ChangeCameraToSapoAction(), InputHandler.DEVICE_KEYBOARD,
 			KeyInput.KEY_2, InputHandler.AXIS_NONE, false);
+		input.addAction(new ChangeCameraToCoinAction(), InputHandler.DEVICE_KEYBOARD,
+			KeyInput.KEY_3, InputHandler.AXIS_NONE, false);
+		input.addAction(new ResetCameraPositionAction(), InputHandler.DEVICE_KEYBOARD,
+			KeyInput.KEY_4, InputHandler.AXIS_NONE, false);
 	}
 
 	private void showAxisRods()
@@ -86,7 +94,11 @@ public class TgosMain extends SimplePhysicsGame
 			{
 				cam.getLocation().set(sapo.getLittleSapoPosition());
 				cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
-
+			}
+			else if (cameraOption == CameraOptions.CoinCamera)
+			{
+				cam.getLocation().set(coin.getLocation());
+				cam.update();
 			}
 
 			lastTime = new Date();
@@ -105,7 +117,7 @@ public class TgosMain extends SimplePhysicsGame
 					coinInMovement = false;
 					System.out.println("DEBUG: Se detuvo la moneda papaaaaaaa");
 
-					if (cameraOption == CameraOptions.SapoCamera)
+					if (cameraOption != CameraOptions.FreeStyleCamera)
 					{
 						// We must restore the camera to the start point
 						cam.getLocation().set(Vector3f.ZERO);
@@ -257,6 +269,30 @@ public class TgosMain extends SimplePhysicsGame
 		@Override
 		public void performAction(InputActionEvent evt)
 		{
+			cameraOption = CameraOptions.FreeStyleCamera;
+		}
+	}
+	
+	private class ChangeCameraToCoinAction extends InputAction
+	{
+		
+		@Override
+		public void performAction(InputActionEvent evt)
+		{
+			cameraOption = CameraOptions.CoinCamera;
+		}
+	}
+	
+	private class ResetCameraPositionAction extends InputAction
+	{
+		
+		@Override
+		public void performAction(InputActionEvent evt)
+		{
+			// We must restore the camera to the start point
+			cam.getLocation().set(Vector3f.ZERO);
+			cam.lookAt(sapo.getLittleSapoPosition(), Vector3f.UNIT_Y);
+			cam.update();
 			cameraOption = CameraOptions.FreeStyleCamera;
 		}
 	}
