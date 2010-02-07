@@ -82,5 +82,15 @@ public class Coin extends SapoElement
 	{
 		return coinDynamicNode.getLinearVelocity(storeVector);
 	}
+
+	/**
+	 * Return the Spatial Node of the coin
+	 * 
+	 * @return the physicCoin
+	 */
+	public Spatial getPhysicCoin()
+	{
+		return physicCoin;
+	}
 	
 }

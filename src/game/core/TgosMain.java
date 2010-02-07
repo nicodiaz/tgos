@@ -20,8 +20,11 @@ public class TgosMain extends SimplePhysicsGame
 	private Date initTime = new Date(); // the time that start the shoot
 	private Date lastTime = null;
 	private Vector3f currentVelocity = new Vector3f();
+	private Integer points = 0;
 
+	// Global Elements
 	Coin coin = null;
+	Sapo sapo = null;
 
 	// actions variables
 	private boolean playerIsThrowing = false;
@@ -38,7 +41,7 @@ public class TgosMain extends SimplePhysicsGame
 		// We start creating the room
 		Room room = new Room(getPhysicsSpace(), rootNode, display);
 
-		Sapo sapo = new Sapo(getPhysicsSpace(), rootNode, display);
+		sapo = new Sapo(getPhysicsSpace(), rootNode, display);
 
 		coin = new Coin(getPhysicsSpace(), rootNode, display);
 
@@ -84,6 +87,11 @@ public class TgosMain extends SimplePhysicsGame
 				{
 					coinInMovement = false;
 					System.out.println("DEBUG: Se detuvo la moneda papaaaaaaa");
+					// we must check if is touching a box
+					if (isTouchingABox())
+					{
+						points = getPoints();						
+					}
 				}
 			}
 			else
@@ -93,6 +101,17 @@ public class TgosMain extends SimplePhysicsGame
 		}
 	}
 
+	private boolean isTouchingABox()
+	{
+		return sapo.isTouching(coin.getPhysicCoin());
+	}
+	private Integer getPoints()
+	{
+		
+		
+		
+		return 0;
+	}
 	private boolean isCoinStopped()
 	{
 		if (currentVelocity.distance(Vector3f.ZERO) == 0.0f)
