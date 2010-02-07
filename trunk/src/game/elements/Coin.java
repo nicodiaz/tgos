@@ -1,6 +1,6 @@
 package game.elements;
 
-import game.core.ModelLoader;
+import game.utils.ModelLoader;
 
 import java.util.List;
 

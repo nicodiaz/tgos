@@ -1,4 +1,4 @@
-package game.core;
+package game.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
