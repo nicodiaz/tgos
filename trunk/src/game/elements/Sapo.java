@@ -1,27 +1,13 @@
 package game.elements;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.jme.bounding.BoundingBox;
-import com.jme.image.Texture;
 import com.jme.intersection.BoundingCollisionResults;
-import com.jme.intersection.CollisionResults;
 import com.jme.math.FastMath;
 import com.jme.math.Vector3f;
-import com.jme.scene.Geometry;
 import com.jme.scene.Node;
 import com.jme.scene.Spatial;
 import com.jme.scene.shape.Box;
-import com.jme.scene.state.TextureState;
 import com.jme.system.DisplaySystem;
-import com.jme.util.TextureManager;
-import com.jme.util.resource.ResourceLocatorTool;
-import com.jme.util.resource.SimpleResourceLocator;
 import com.jmex.physics.PhysicsSpace;
 import com.jmex.physics.StaticPhysicsNode;
 import com.jmex.physics.material.Material;
