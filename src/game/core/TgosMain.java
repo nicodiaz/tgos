@@ -33,6 +33,9 @@ public class TgosMain extends SimplePhysicsGame
 	private Integer[] playerScores = { 0, 0 };
 	private Integer[] playerShoots = { 0, 0 };
 	private Integer playerTurn = 0;
+	
+	// The available number of shoots
+	private final Integer NUMBEROFSHOOTS = 2;
 
 	// Global Elements
 	private Coin coin = null;
@@ -67,6 +70,7 @@ public class TgosMain extends SimplePhysicsGame
 		initActions();
 		makeTexts();
 		Logger.getLogger("").log(Level.WARNING, "Juego cargado. Enjoy!");
+
 	}
 
 	private void makeTexts()
@@ -141,6 +145,10 @@ public class TgosMain extends SimplePhysicsGame
 		input.addAction(new ResetCameraPositionAction(), InputHandler.DEVICE_KEYBOARD,
 			KeyInput.KEY_4, InputHandler.AXIS_NONE, false);
 
+		// the new game Action
+		input.addAction(new NewGameAction(), InputHandler.DEVICE_KEYBOARD, KeyInput.KEY_N,
+			InputHandler.AXIS_NONE, false);
+
 	}
 
 	private void showAxisRods()
@@ -161,7 +169,7 @@ public class TgosMain extends SimplePhysicsGame
 			{
 				deactivateMouseShooting = true;
 			}
-			
+
 			// We must check if the cam is allright
 			if (cameraOption == CameraOptions.SapoCamera)
 			{
@@ -207,10 +215,9 @@ public class TgosMain extends SimplePhysicsGame
 					playerScores[playerTurn] += lastPoints;
 					createShootInfoText(lastPoints);
 					initShootTime = timer.getTimeInSeconds();
-					
+
 					// We cannot forget to activate again the mouse
 					deactivateMouseShooting = false;
-					
 				}
 			}
 			else
@@ -219,10 +226,13 @@ public class TgosMain extends SimplePhysicsGame
 			}
 		}
 
-		// Now, we must update the player information
+		/*
+		 * This section is to update the player information
+		 */
 		playerInfoText.print(createPlayerInfoText());
 		scoreInfoText.print(createScoreInfoText());
 
+		// This if is to appear and disappear the information text of the shoot.
 		if (timer.getTimeInSeconds() > (initShootTime + 3.0f))
 		{
 			statNode.detachChild(shootInfoText);
@@ -233,6 +243,66 @@ public class TgosMain extends SimplePhysicsGame
 			}
 			cam.update();
 		}
+	}
+
+	private void changeTurns()
+	{
+		coinInMovement = false;
+		deactivateMouseShooting = false;
+		playerTurn = 1;
+		playerScores[1] = 0;
+		playerShoots[1] = 0;
+	}
+
+	private void finishGame()
+	{
+		// First, we must see wich player won the game. -1 Indicates Game Draw.
+		String winningText = null;
+
+		if (playerScores[0] == playerScores[1])
+		{
+			winningText = "Juego Empatado con " + playerScores[0] + " puntos.";
+		}
+		else if (playerScores[0] > playerScores[1])
+		{
+			winningText = "El jugador 1 ha ganado! Con " + playerScores[0] + " puntos.";
+		}
+		else
+		{
+			winningText = "El jugador 2 ha ganado! Con " + playerScores[1] + " puntos.";
+		}
+
+		// Remove all texts
+		statNode.detachAllChildren();
+
+		// The player info text
+		Text gameOverText = Text.createDefaultTextLabel("gameOverText", "Juego Terminado");
+		gameOverText.getLocalTranslation().set(display.getWidth() / 2.0f - 250.0f,
+			display.getHeight() / 2.0f + 40.0f, 0);
+		gameOverText.getLocalScale().set(3.0f, 3.0f, 3.0f);
+		gameOverText.getTextColor().set(0.0f, 1.0f, 0.0f, 1.0f);
+		statNode.attachChild(gameOverText);
+
+		// The winner info text
+		Text winnerInfoText = Text.createDefaultTextLabel("winnerInfoText", winningText);
+		winnerInfoText.getLocalTranslation().set(
+			new Vector3f(gameOverText.getLocalTranslation().add(0, -150.0f, 0)));
+		winnerInfoText.getLocalScale().set(1.5f, 1.5f, 1.5f);
+		winnerInfoText.getTextColor().set(1.0f, 0.0f, 0.0f, 1.0f);
+		statNode.attachChild(winnerInfoText);
+
+		input.removeAllActions();
+		
+		// Add and action to start again.
+		input.addAction(new NewGameAction(), InputHandler.DEVICE_KEYBOARD, KeyInput.KEY_SPACE,
+			InputHandler.AXIS_NONE, false);
+
+		// The winner info text
+		Text newGameInfoText = Text.createDefaultTextLabel("newGameInfoText", "Pulse la tecla espacio para empezar un nuevo juego");
+		newGameInfoText.getLocalTranslation().set(Vector3f.ZERO);
+		newGameInfoText.getLocalScale().set(1.5f, 1.5f, 1.5f);
+		newGameInfoText.getTextColor().set(0.0f, 0.0f, 0.0f, 1.0f);
+		statNode.attachChild(newGameInfoText);
 
 	}
 
@@ -270,11 +340,23 @@ public class TgosMain extends SimplePhysicsGame
 		@Override
 		public void performAction(InputActionEvent evt)
 		{
-			
+
 			if (deactivateMouseShooting)
 			{
 				// We cannot do anything
+				return;
+			}
+			
+			// Change turnos o game over?
+			if (playerTurn == 0 && (playerShoots[playerTurn] + 1) == NUMBEROFSHOOTS)
+			{
+				changeTurns();
 				return ;
+			}
+			else if (playerTurn == 1 && (playerShoots[playerTurn] + 1) == NUMBEROFSHOOTS)
+			{
+				// Game Over!
+				finishGame();
 			}
 			
 
@@ -332,11 +414,27 @@ public class TgosMain extends SimplePhysicsGame
 
 				// The throw has finish
 				playerIsThrowing = false;
-				
+
 				// We disable the mouse
 				deactivateMouseShooting = true;
 			}
 		}
+	}
+
+	private class NewGameAction extends InputAction
+	{
+
+		@Override
+		public void performAction(InputActionEvent evt)
+		{
+			playerTurn = 0;
+			playerScores[0] = playerScores[1] = 0;
+			playerShoots[0] = playerShoots[1] = 0;
+
+			initActions();
+			makeTexts();
+		}
+
 	}
 
 	private class ChangeCameraToSapoAction extends InputAction
