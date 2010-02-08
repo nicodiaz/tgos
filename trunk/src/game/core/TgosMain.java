@@ -35,7 +35,7 @@ public class TgosMain extends SimplePhysicsGame
 	private Integer playerTurn = 0;
 	
 	// The available number of shoots
-	private final Integer NUMBEROFSHOOTS = 2;
+	private final Integer NUMBEROFSHOOTS = 1;
 
 	// Global Elements
 	private Coin coin = null;
@@ -46,6 +46,11 @@ public class TgosMain extends SimplePhysicsGame
 	private Text shootInfoText = new Text();
 	private Text scoreInfoText = new Text();
 	private Text sapoHitText = null;
+	private Text gameOverText = new Text();
+	private Text winnerInfoText = new Text();
+	private Text newGameInfoText = new Text();
+	private Text changeTurnText = new Text();
+	private Text changeTurn2Text = new Text();
 
 	// actions variables
 	private boolean playerIsThrowing = false;
@@ -146,7 +151,7 @@ public class TgosMain extends SimplePhysicsGame
 			KeyInput.KEY_4, InputHandler.AXIS_NONE, false);
 
 		// the new game Action
-		input.addAction(new NewGameAction(), InputHandler.DEVICE_KEYBOARD, KeyInput.KEY_N,
+		input.addAction(new NewGameAction(), InputHandler.DEVICE_KEYBOARD, KeyInput.KEY_SPACE,
 			InputHandler.AXIS_NONE, false);
 
 	}
@@ -218,6 +223,29 @@ public class TgosMain extends SimplePhysicsGame
 
 					// We cannot forget to activate again the mouse
 					deactivateMouseShooting = false;
+					
+					// Finally, we check if there was the last shoot
+					if (playerTurn == 0 && (playerShoots[0]) == NUMBEROFSHOOTS)
+					{
+						// The player info text
+						changeTurnText = Text.createDefaultTextLabel("changeTurnText", "Cambio de Turno");
+						changeTurnText.getLocalTranslation().set(display.getWidth() / 2.0f - 250.0f,
+							display.getHeight() / 2.0f + 40.0f, 0);
+						changeTurnText.getLocalScale().set(3.0f, 3.0f, 3.0f);
+						changeTurnText.getTextColor().set(0.0f, 1.0f, 0.0f, 1.0f);
+						statNode.attachChild(changeTurnText);
+						
+						// The winner info text
+						changeTurn2Text = Text.createDefaultTextLabel("changeTurn2Text", "Haga click para continuar");
+						changeTurn2Text.getLocalTranslation().set(Vector3f.ZERO);
+						changeTurn2Text.getLocalScale().set(1.5f, 1.5f, 1.5f);
+						changeTurn2Text.getTextColor().set(0.0f, 0.0f, 0.0f, 1.0f);
+						statNode.attachChild(changeTurn2Text);
+					}
+					else if (playerTurn == 1 && (playerShoots[0]) == NUMBEROFSHOOTS)
+					{
+						finishGame();
+					}
 				}
 			}
 			else
@@ -252,6 +280,8 @@ public class TgosMain extends SimplePhysicsGame
 		playerTurn = 1;
 		playerScores[1] = 0;
 		playerShoots[1] = 0;
+		statNode.detachChild(changeTurnText);
+		statNode.detachChild(changeTurn2Text);
 	}
 
 	private void finishGame()
@@ -272,11 +302,12 @@ public class TgosMain extends SimplePhysicsGame
 			winningText = "El jugador 2 ha ganado! Con " + playerScores[1] + " puntos.";
 		}
 
-		// Remove all texts
-		statNode.detachAllChildren();
+		// Remove all texts. Carefull: The method detachAllChildren crash!!
+		statNode.detachChild(playerInfoText);
+		statNode.detachChild(scoreInfoText);
 
 		// The player info text
-		Text gameOverText = Text.createDefaultTextLabel("gameOverText", "Juego Terminado");
+		gameOverText = Text.createDefaultTextLabel("gameOverText", "Juego Terminado");
 		gameOverText.getLocalTranslation().set(display.getWidth() / 2.0f - 250.0f,
 			display.getHeight() / 2.0f + 40.0f, 0);
 		gameOverText.getLocalScale().set(3.0f, 3.0f, 3.0f);
@@ -284,7 +315,7 @@ public class TgosMain extends SimplePhysicsGame
 		statNode.attachChild(gameOverText);
 
 		// The winner info text
-		Text winnerInfoText = Text.createDefaultTextLabel("winnerInfoText", winningText);
+		winnerInfoText = Text.createDefaultTextLabel("winnerInfoText", winningText);
 		winnerInfoText.getLocalTranslation().set(
 			new Vector3f(gameOverText.getLocalTranslation().add(0, -150.0f, 0)));
 		winnerInfoText.getLocalScale().set(1.5f, 1.5f, 1.5f);
@@ -298,7 +329,7 @@ public class TgosMain extends SimplePhysicsGame
 			InputHandler.AXIS_NONE, false);
 
 		// The winner info text
-		Text newGameInfoText = Text.createDefaultTextLabel("newGameInfoText", "Pulse la tecla espacio para empezar un nuevo juego");
+		newGameInfoText = Text.createDefaultTextLabel("newGameInfoText", "Pulse la tecla espacio para empezar un nuevo juego");
 		newGameInfoText.getLocalTranslation().set(Vector3f.ZERO);
 		newGameInfoText.getLocalScale().set(1.5f, 1.5f, 1.5f);
 		newGameInfoText.getTextColor().set(0.0f, 0.0f, 0.0f, 1.0f);
@@ -347,16 +378,16 @@ public class TgosMain extends SimplePhysicsGame
 				return;
 			}
 			
-			// Change turnos o game over?
-			if (playerTurn == 0 && (playerShoots[playerTurn] + 1) == NUMBEROFSHOOTS)
+			// Change turnos o game over? With this, we disable the shoot.
+			if (playerTurn == 0 && (playerShoots[playerTurn]) == NUMBEROFSHOOTS)
 			{
 				changeTurns();
 				return ;
 			}
-			else if (playerTurn == 1 && (playerShoots[playerTurn] + 1) == NUMBEROFSHOOTS)
+			else if (playerTurn == 1 && (playerShoots[playerTurn]) == NUMBEROFSHOOTS)
 			{
 				// Game Over!
-				finishGame();
+				return ;
 			}
 			
 
