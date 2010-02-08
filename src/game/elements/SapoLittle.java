@@ -33,7 +33,9 @@ public class SapoLittle extends SapoElement
 	private StaticPhysicsNode sapoLittleStaticNode = null;
 	private Spatial sapoDecoPhysic = null;
 
-	// variables
+	/*
+	 * SapoLittle Scene variables
+	 */
 	private Float littleWidth = 0.7f;
 	private Float littleHeight = 0.3f;
 	private Float littleThick = 0.025f;

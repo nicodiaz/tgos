@@ -1,7 +1,8 @@
 package game.elements;
 
+import game.utils.SapoConfig;
+
 import com.jme.bounding.BoundingBox;
-import com.jme.intersection.BoundingCollisionResults;
 import com.jme.math.FastMath;
 import com.jme.math.Vector3f;
 import com.jme.scene.Node;
@@ -20,18 +21,18 @@ import com.jmex.physics.material.Material;
  */
 public class Sapo extends SapoElement
 {
-
+	
+	/*
+	 * Sapo Scene Variables
+	 */
 	// Wall variables
 	private Float sapoWidth = 10.0f;
 	private Float sapoHeight = sapoWidth;
 	private Float sapoThick = 0.5f;
 	private Float sapoBack = 100.0f;
 	private Float sapoFront = 80.0f;
-	final private Float sapoZMid = (sapoFront + sapoBack) / 2.0f;
 
 	// Inner Falls variables
-	// As the width and the heigth are equals, the tg is PI / 4 = 45*
-	private Float innerFallsInclination = FastMath.PI / 4.0f;
 	private Float innerFallsThick = 0.1f;
 
 	// Boxes variables
@@ -61,6 +62,9 @@ public class Sapo extends SapoElement
 	
 	// the separation between boxes.
 	private Float boxesSeparation = (2 * sapoWidth) / 3.0f;
+	final private Float sapoZMid = (sapoFront + sapoBack) / 2.0f;
+	// As the width and the heigth are equals, the tg is PI / 4 = 45*
+	private Float innerFallsInclination = FastMath.PI / 4.0f;
 	
 	// And the location of this little sapo, for the camera on it
 	SapoLittle sapoLittle = null;
@@ -79,9 +83,6 @@ public class Sapo extends SapoElement
 		OUT //This is when no box was touched.
 	}
 	
-	
-	
-
 	public Sapo(PhysicsSpace theSpace, Node rootNode, DisplaySystem disp)
 	{
 		super(theSpace, rootNode, disp);
@@ -90,6 +91,9 @@ public class Sapo extends SapoElement
 		sapoStaticNode.setModelBound(new BoundingBox());
 		sapoStaticNode.updateModelBound();
 		rootNode.attachChild(sapoStaticNode);
+		
+		// Recover the scene data from the XML file
+		setupSceneData();
 
 		makeWalls();
 		makeInnerFalls();
@@ -112,6 +116,27 @@ public class Sapo extends SapoElement
 	{
 		this(theSpace, rootNode, disp);
 		sapoStaticNode.getLocalTranslation().set(center);
+	}
+	
+	private void setupSceneData()
+	{
+		SapoConfig config = SapoConfig.getInstance();
+		
+		sapoWidth = config.getSapoWidth();
+		sapoHeight = config.getSapoHeight();
+		sapoThick = config.getSapoThick();
+		sapoBack = config.getSapoBack();
+		sapoFront = config.getSapoFront();
+		innerFallsThick = config.getInnerFallsThick();
+		boxesLength = config.getBoxesLength();
+		boxesThick = config.getBoxesThick();
+		boxesHigh = config.getBoxesHigh();
+		topLineDeep = config.getTopLineDeep();
+		topLineThick = config.getTopLineThick();
+		topTranLinesSeparation = config.getTopTranLinesSeparation();
+		topLongLinesSeparation = config.getTopLongLinesSeparation();
+		backWallHeight = config.getBackWallHeight();
+		littleSapoScale = config.getLittleSapoScale();
 	}
 
 	/*
@@ -375,7 +400,8 @@ public class Sapo extends SapoElement
 		sapoLittle = new SapoLittle(space, rootNode, display, new Vector3f());
 		StaticPhysicsNode sl_staticNode = sapoLittle.getSapoLittleStaticNode();
 		sapoStaticNode.attachChild(sl_staticNode);
-		sl_staticNode.getLocalTranslation().set(0, sapoHeight + (littleSapoScale * sapoLittle.getHeight()),
+		sl_staticNode.getLocalTranslation().set(0,
+			sapoHeight + (littleSapoScale * sapoLittle.getHeight()),
 			-(sapoBack - littleSapoScale * sapoLittle.getWidth() * 1.2f));
 		sl_staticNode.getLocalScale().set(littleSapoScale, littleSapoScale, littleSapoScale);
 	}
