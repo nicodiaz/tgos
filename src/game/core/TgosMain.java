@@ -24,8 +24,8 @@ public class TgosMain extends SimplePhysicsGame
 	private boolean coinInMovement = false;
 	private Date initTime = new Date(); // the time that start the shoot
 	private Date lastTime = null;
+	private Float initShootTime = 0.0f;
 	private Vector3f currentVelocity = new Vector3f();
-	private Integer points = 0;
 	private CameraOptions cameraOption = CameraOptions.FreeStyleCamera;
 
 	// The players data. In the future, this can be a class.
@@ -38,7 +38,9 @@ public class TgosMain extends SimplePhysicsGame
 	private Sapo sapo = null;
 
 	// The text information.
-	private Text playerInfo = null;
+	private Text playerInfoText = null;
+	private Text shootInfoText = new Text();
+	private Text sapoHitText = null;
 
 	// actions variables
 	private boolean playerIsThrowing = false;
@@ -68,17 +70,43 @@ public class TgosMain extends SimplePhysicsGame
 	private void makeTexts()
 	{
 		// finally print a key-binding message
-		playerInfo = Text.createDefaultTextLabel("playerInfo", createPlayerInfoText());
-		playerInfo.getLocalTranslation().set(0, display.getHeight() - 20.0f, 0);
-		playerInfo.getLocalScale().set(1.0f, 1.0f, 1.0f);
-		playerInfo.getTextColor().set(0, 0, 0, 1.0f);
-		statNode.attachChild(playerInfo);
+		playerInfoText = Text.createDefaultTextLabel("playerInfoText", createPlayerInfoText());
+		playerInfoText.getLocalTranslation().set(0, display.getHeight() - 20.0f, 0);
+		playerInfoText.getLocalScale().set(1.0f, 1.0f, 1.0f);
+		playerInfoText.getTextColor().set(0, 0, 0, 1.0f);
+		statNode.attachChild(playerInfoText);
 	}
 
 	private String createPlayerInfoText()
 	{
 		return "Turno Jugador " + (playerTurn + 1) + ". Puntos hasta el momento: "
 			+ playerScores[playerTurn] + ". Tiros hasta el momento: " + playerShoots[playerTurn];
+
+	}
+
+	private void createShootInfoText(Integer lastPoints)
+	{
+		// Text 2d in front of the camera
+
+		shootInfoText = new Text("shootInfoText", lastPoints.toString() + " puntos!!!");
+		shootInfoText.getLocalTranslation().set(display.getWidth() / 2.0f - 50.0f,
+			display.getHeight() / 2.0f, 0);
+		shootInfoText.getTextColor().set(1.0f, 0, 0, 1.0f);
+		shootInfoText.getLocalScale().set(2.0f, 2.0f, 2.0f);
+		
+		statNode.attachChild(shootInfoText);
+		
+		
+		if (lastPoints == 150)
+		{
+			sapoHitText = new Text("sapoHitText", "Sapo Hit!!!");
+			sapoHitText.getLocalTranslation().set(shootInfoText.getLocalTranslation().x - 100.0f,
+				shootInfoText.getLocalTranslation().y - 50.0f, 0);
+			sapoHitText.getTextColor().set(0.0f, 1.0f, 0, 1.0f);
+			sapoHitText.getLocalScale().set(3.0f, 3.0f, 3.0f);
+			
+			statNode.attachChild(sapoHitText);			
+		}
 
 	}
 
@@ -131,10 +159,10 @@ public class TgosMain extends SimplePhysicsGame
 			lastTime = new Date();
 			long timeDiff = lastTime.getTime() - initTime.getTime();
 
-			if (Math.floor(timeDiff / 1000.0) > 1.3)
+			if (Math.floor(timeDiff / 1000.0) > 0.5)
 			{
 				initTime = lastTime;
-				// A second have passed. We must verify the velocities.
+				// A half a second have passed. We must verify the velocities.
 				currentVelocity = coin.getVelocity(null);
 				System.out.println("DEBUG: Vector Velocidad: " + currentVelocity.x + ", "
 					+ currentVelocity.y + ", " + currentVelocity.z);
@@ -151,14 +179,11 @@ public class TgosMain extends SimplePhysicsGame
 					}
 
 					// we must check if is touching a box
+					Integer lastPoints = sapo.getPoints(coin);
 					System.out.println("DEBUG: HIZO " + sapo.getPoints(coin) + " PUNTOS");
-					playerScores[playerTurn] += sapo.getPoints(coin);
-
-					// DELETE THIS BEFORE
-					// if (sapo.isTouching(coin))
-					// {
-					// points = getPoints();
-					// }
+					playerScores[playerTurn] += lastPoints;
+					createShootInfoText(lastPoints);
+					initShootTime = timer.getTimeInSeconds();
 				}
 			}
 			else
@@ -168,14 +193,19 @@ public class TgosMain extends SimplePhysicsGame
 		}
 
 		// Now, we must update the player information
-		playerInfo.print(createPlayerInfoText());
+		playerInfoText.print(createPlayerInfoText());
 
-	}
+		if (timer.getTimeInSeconds() > (initShootTime + 3.0f))
+		{
+			statNode.detachChild(shootInfoText);
+			
+			if (sapoHitText != null)
+			{
+				statNode.detachChild(sapoHitText);
+			}
+			cam.update();
+		}
 
-	private Integer getPoints()
-	{
-
-		return 0;
 	}
 
 	private boolean isCoinStopped()
@@ -186,7 +216,7 @@ public class TgosMain extends SimplePhysicsGame
 			return false;
 		}
 
-		return (currentVelocity.distance(Vector3f.ZERO) < 0.01 ? true : false);
+		return (currentVelocity.distance(Vector3f.ZERO) < 0.1 ? true : false);
 	}
 
 	/*
