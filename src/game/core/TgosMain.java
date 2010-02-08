@@ -35,7 +35,7 @@ public class TgosMain extends SimplePhysicsGame
 	private Integer playerTurn = 0;
 	
 	// The available number of shoots
-	private final Integer NUMBEROFSHOOTS = 1;
+	private final Integer NUMBEROFSHOOTS = 10;
 
 	// Global Elements
 	private Coin coin = null;
@@ -149,11 +149,6 @@ public class TgosMain extends SimplePhysicsGame
 			KeyInput.KEY_3, InputHandler.AXIS_NONE, false);
 		input.addAction(new ResetCameraPositionAction(), InputHandler.DEVICE_KEYBOARD,
 			KeyInput.KEY_4, InputHandler.AXIS_NONE, false);
-
-		// the new game Action
-		input.addAction(new NewGameAction(), InputHandler.DEVICE_KEYBOARD, KeyInput.KEY_SPACE,
-			InputHandler.AXIS_NONE, false);
-
 	}
 
 	private void showAxisRods()
@@ -462,6 +457,11 @@ public class TgosMain extends SimplePhysicsGame
 			playerScores[0] = playerScores[1] = 0;
 			playerShoots[0] = playerShoots[1] = 0;
 
+			input.removeAllActions();
+			statNode.detachChild(gameOverText);
+			statNode.detachChild(winnerInfoText);
+			statNode.detachChild(newGameInfoText);
+			
 			initActions();
 			makeTexts();
 		}
