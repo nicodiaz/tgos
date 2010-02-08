@@ -1,6 +1,7 @@
 package game.elements;
 
 import game.utils.ModelLoader;
+import game.utils.SapoConfig;
 
 import java.util.List;
 
@@ -19,6 +20,9 @@ public class Coin extends SapoElement
 {
 	private DynamicPhysicsNode coinDynamicNode = null;
 	private Spatial physicCoin = null;
+	
+	// coin Variables
+	private Float coinScale = 0.0025f;
 
 	/**
 	 * The coin to be throw. By default, it's located in the (0, 0, 0)
@@ -32,6 +36,9 @@ public class Coin extends SapoElement
 
 		coinDynamicNode = space.createDynamicNode();
 		rootNode.attachChild(coinDynamicNode);
+		
+		// Recover the scene data from the XML file
+		setupSceneData();
 
 		Node coinPhysicNode = (Node) ModelLoader.load3ds("models/coin.3ds");
 		List<Spatial> spatialList = ((Node) coinPhysicNode.getChild(0)).getChildren();
@@ -39,7 +46,7 @@ public class Coin extends SapoElement
 		coinDynamicNode.attachChild(physicCoin);
 
 		coinDynamicNode.getLocalTranslation().set(new Vector3f(1000f, 1000f, 1000f));
-		coinDynamicNode.getLocalScale().set(0.0025f, 0.0025f, 0.0025f);
+		coinDynamicNode.getLocalScale().set(coinScale, coinScale, coinScale);
 
 		// The coin material must be some sort of metal.
 		coinDynamicNode.setMaterial(Material.IRON);
@@ -65,6 +72,14 @@ public class Coin extends SapoElement
 		coinDynamicNode.getLocalTranslation().set(origin);
 		coinDynamicNode.addForce(force);
 	}
+	
+	private void setupSceneData()
+	{
+		SapoConfig config = SapoConfig.getInstance();
+
+		coinScale = config.getCoinScale();
+	}
+	
 
 	public void setCoinShoot(Vector3f origin, Vector3f force)
 	{
