@@ -21,7 +21,9 @@ public class Coin extends SapoElement
 	private DynamicPhysicsNode coinDynamicNode = null;
 	private Spatial physicCoin = null;
 	
-	// coin Variables
+	/*
+	 * Coin Scene Variables
+	 */
 	private Float coinScale = 0.0025f;
 
 	/**

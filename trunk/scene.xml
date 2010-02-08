@@ -5,6 +5,27 @@
 	<littleThick>0.025</littleThick>
 	
 	<coinScale>0.0025</coinScale>
+	
+	<roomSize>40.0</roomSize>
+	<roomThick>1.5</roomThick>
+	<roomFar>120.0</roomFar>
+	<distanceFromFloor>27.0</distanceFromFloor>
+	
+	<sapoWidth>10.0</sapoWidth>
+	<sapoHeight>10.0</sapoHeight>
+	<sapoThick>0.5</sapoThick>
+	<sapoBack>100.0</sapoBack>
+	<sapoFront>80.0</sapoFront>
+	<innerFallsThick>0.1</innerFallsThick>
+	<boxesLength>2.0</boxesLength>
+	<boxesThick>0.05</boxesThick>
+	<boxesHigh>1.5</boxesHigh>
+	<topLineDeep>1.2</topLineDeep>
+	<topLineThick>0.05</topLineThick>
+	<topTranLinesSeparation>5.0</topTranLinesSeparation>
+	<topLongLinesSeparation>5.4</topLongLinesSeparation>
+	<backWallHeight>3.0</backWallHeight>
+	<littleSapoScale>3.0</littleSapoScale>
 </scene>
 
 

@@ -1,5 +1,7 @@
 package game.elements;
 
+import game.utils.SapoConfig;
+
 import com.jme.bounding.BoundingBox;
 import com.jme.light.PointLight;
 import com.jme.math.Vector3f;
@@ -24,22 +26,24 @@ public class Room extends SapoElement
 {
 	private StaticPhysicsNode room = null;
 	
-	// this factor is the size of bigger for lateral
-	private Float size = 40.0f;
-	
+	/*
+	 * Room Scene Variables
+	 */
+	// this factor is the roomSize of bigger for lateral
+	private Float roomSize = 40.0f;
 	// doesn't care, how deeper is the floor/wall
-	private Float thick = 1.5f;
-	
-	// How far is the front wall
-	private Float far = 120.0f;
-	
-	// Lights
-	private Float lightHigh = size - 4.0f;
-	private Float lightFar = far - 20.0f;
+	private Float roomThick = 1.5f;
+	// How roomFar is the front wall
+	private Float roomFar = 120.0f;
+	private Float distanceFromFloor = 27.0f;
 	
 	
-	private float distanceFromFloor = 27.0f;
 	
+	/*
+	 * Lights
+	 */
+	private Float lightHigh = roomSize - 4.0f;
+	private Float lightFar = roomFar - 20.0f;
 	
 	public Room(PhysicsSpace theSpace, Node rootNode, DisplaySystem disp)
 	{
@@ -50,47 +54,50 @@ public class Room extends SapoElement
 		room.updateModelBound();
 		rootNode.attachChild(room);
 		
+		// Recover the scene data from the XML file
+		setupSceneData();
+		
 //		//Now we use the boxes of JME, that are trimeshes. We start with the front Wall. 
-		final Box frontWallBox = new Box("frontWall", new Vector3f(), size, size, thick);
+		final Box frontWallBox = new Box("frontWall", new Vector3f(), roomSize, roomSize, roomThick);
 		room.attachChild(frontWallBox);
-		frontWallBox.getLocalTranslation().set(new Vector3f(0, distanceFromFloor, -far));
+		frontWallBox.getLocalTranslation().set(new Vector3f(0, distanceFromFloor, -roomFar));
 //		color(frontWallBox, new ColorRGBA(102.0f / 255f, 51.0f / 255.0f , 255.0f / 255.0f, 1.0f));
 		applyTextures(frontWallBox, "models/itbaLogo.jpg");
 		
 		
-		final Box backWallBox = new Box("backWallBox", new Vector3f(), size, size, thick);
+		final Box backWallBox = new Box("backWallBox", new Vector3f(), roomSize, roomSize, roomThick);
 		room.attachChild(backWallBox);
-		backWallBox.getLocalTranslation().set(new Vector3f(0, distanceFromFloor, far));
+		backWallBox.getLocalTranslation().set(new Vector3f(0, distanceFromFloor, roomFar));
 //		color(backWallBox, new ColorRGBA(102.0f / 255f, 51.0f / 255.0f , 255.0f / 255.0f, 1.0f));
 		applyTextures(backWallBox, "models/itbaLogo.jpg");
 		
 
 //		// The floor
-		final Box floorBox = new Box("floor", new Vector3f(), size, thick, far);
+		final Box floorBox = new Box("floor", new Vector3f(), roomSize, roomThick, roomFar);
 		room.attachChild(floorBox);
-		floorBox.getLocalTranslation().set(new Vector3f(0, -size + distanceFromFloor, 0));
+		floorBox.getLocalTranslation().set(new Vector3f(0, -roomSize + distanceFromFloor, 0));
 //		color(floorBox, new ColorRGBA(102.0f / 255f, 51.0f / 255.0f , 0.0f, 1.0f));
 		applyTextures(floorBox, "models/concreteTexture.jpg");
 		
 
 //		// The roof
-		final Box roofBox = new Box("roof", new Vector3f(), size, thick, far);
+		final Box roofBox = new Box("roof", new Vector3f(), roomSize, roomThick, roomFar);
 		room.attachChild(roofBox);
-		roofBox.getLocalTranslation().set(new Vector3f(0, size + distanceFromFloor, 0));
+		roofBox.getLocalTranslation().set(new Vector3f(0, roomSize + distanceFromFloor, 0));
 //		color(roofBox, new ColorRGBA(102.0f / 255f, 51.0f / 255.0f , 0.0f, 1.0f));
 		applyTextures(roofBox, "models/roofTexture.jpg");
 		
 //		// The right wall
-		final Box rightWallBox = new Box("rightWall", new Vector3f(), thick, size, far);
+		final Box rightWallBox = new Box("rightWall", new Vector3f(), roomThick, roomSize, roomFar);
 		room.attachChild(rightWallBox);
-		rightWallBox.getLocalTranslation().set(new Vector3f(size, distanceFromFloor, 0));
+		rightWallBox.getLocalTranslation().set(new Vector3f(roomSize, distanceFromFloor, 0));
 //		color(rightWallBox, new ColorRGBA(102.0f / 255f, 51.0f / 255.0f , 255.0f / 255.0f, 1.0f));
 		applyTextures(rightWallBox, "models/wallTexture.jpg");
 		
 //		// The left wall
-		final Box leftWallBox = new Box("leftWall", new Vector3f(), thick, size, far);
+		final Box leftWallBox = new Box("leftWall", new Vector3f(), roomThick, roomSize, roomFar);
 		room.attachChild(leftWallBox);
-		leftWallBox.getLocalTranslation().set(new Vector3f(-size, distanceFromFloor, 0));
+		leftWallBox.getLocalTranslation().set(new Vector3f(-roomSize, distanceFromFloor, 0));
 //		color(leftWallBox, new ColorRGBA(102.0f / 255f, 51.0f / 255.0f , 255.0f / 255.0f, 1.0f));
 		applyTextures(leftWallBox, "models/wallTexture.jpg");
 		
@@ -107,10 +114,21 @@ public class Room extends SapoElement
 	{
 		this(theSpace, rootNode, disp);
 		
-		this.size = size;
-		this.thick = thick;
-		this.far = far;
+		this.roomSize = size;
+		this.roomThick = thick;
+		this.roomFar = far;
 	}
+	
+	private void setupSceneData()
+	{
+		SapoConfig config = SapoConfig.getInstance();
+		
+		roomSize = config.getRoomSize();
+		roomThick = config.getRoomThick();
+		roomFar = config.getRoomFar();
+		distanceFromFloor = config.getDistanceFromFloor();
+	}
+	
 	
 	public StaticPhysicsNode getRoom()
 	{
