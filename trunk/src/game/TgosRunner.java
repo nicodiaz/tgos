@@ -2,6 +2,8 @@ package game;
 
 import game.core.TgosMain;
 
+import java.io.File;
+import java.net.MalformedURLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,8 +30,17 @@ public class TgosRunner
 		// Make a instance of the game
 		TgosMain mainApp = new TgosMain();
 		
+		File imgPresen = new File("models/gamePresen.jpg");
+		
 		// Show the configurations
-//		mainApp.setConfigShowMode(ConfigShowMode.AlwaysShow);
+		try
+		{
+			mainApp.setConfigShowMode(ConfigShowMode.AlwaysShow, imgPresen.toURI().toURL());
+		}
+		catch (MalformedURLException e)
+		{
+			e.printStackTrace();
+		}
 		
 		// Run the game
 		mainApp.start();
