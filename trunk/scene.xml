@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene>
+	<littleWidth>0.7</littleWidth>
+	<littleHeight>0.3</littleHeight>
+	<littleThick>0.025</littleThick>
+	
+	<coinScale>0.0025</coinScale>
+</scene>
+
+
