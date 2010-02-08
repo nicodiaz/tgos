@@ -76,27 +76,27 @@ public class TgosMain extends SimplePhysicsGame
 		playerInfoText.getLocalScale().set(1.0f, 1.0f, 1.0f);
 		playerInfoText.getTextColor().set(1.0f, 0.0f, 0.0f, 1.0f);
 		statNode.attachChild(playerInfoText);
-		
+
 		// The score of the player
 		scoreInfoText = Text.createDefaultTextLabel("scoreInfoText", createScoreInfoText());
 		scoreInfoText.getLocalTranslation().set(0, display.getHeight() - 50.0f, 0);
 		scoreInfoText.getLocalScale().set(1.0f, 1.0f, 1.0f);
 		scoreInfoText.getTextColor().set(1.0f, 0.0f, 0.0f, 1.0f);
 		statNode.attachChild(scoreInfoText);
-		
-		
+
 	}
 
 	private String createPlayerInfoText()
 	{
-		return "Turno Jugador " + (playerTurn + 1) + ". Tiros hasta el momento: " + playerShoots[playerTurn];
+		return "Turno Jugador " + (playerTurn + 1) + ". Tiros hasta el momento: "
+			+ playerShoots[playerTurn];
 	}
 
 	private String createScoreInfoText()
 	{
 		return "Puntos hasta el momento: " + playerScores[playerTurn];
 	}
-	
+
 	private void createShootInfoText(Integer lastPoints)
 	{
 		// Text 2d in front of the camera
@@ -156,14 +156,18 @@ public class TgosMain extends SimplePhysicsGame
 		if (coinInMovement)
 		{
 			// We must check if the cam is allright
-			if (!cam.getLocation().equals(sapo.getLittleSapoPosition())
-				&& cameraOption == CameraOptions.SapoCamera)
+			if (cameraOption == CameraOptions.SapoCamera)
 			{
-				cam.getLocation().set(sapo.getLittleSapoPosition());
-				cam.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
+				// Sapo-Cam
+				if (!cam.getLocation().equals(sapo.getLittleSapoPosition()))
+				{
+					cam.getLocation().set(sapo.getLittleSapoPosition());
+				}
+				cam.lookAt(coin.getLocation(), Vector3f.UNIT_Y);
 			}
 			else if (cameraOption == CameraOptions.CoinCamera)
 			{
+				// Moneda-Cam
 				cam.getLocation().set(coin.getLocation());
 				cam.update();
 			}
