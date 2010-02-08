@@ -33,7 +33,7 @@ public class TgosMain extends SimplePhysicsGame
 	private Integer[] playerScores = { 0, 0 };
 	private Integer[] playerShoots = { 0, 0 };
 	private Integer playerTurn = 0;
-	
+
 	// The available number of shoots
 	private final Integer NUMBEROFSHOOTS = 10;
 
@@ -62,8 +62,8 @@ public class TgosMain extends SimplePhysicsGame
 	protected void simpleInitGame()
 	{
 		Logger.getLogger("").log(Level.WARNING, "Cargando Juego. Por favor espere...");
-		// First, for debug, we set the axis.
-		showAxisRods();
+		// For debug, we set the axis.
+		// showAxisRods();
 
 		// We start creating the room
 		Room room = new Room(getPhysicsSpace(), rootNode, display);
@@ -195,9 +195,11 @@ public class TgosMain extends SimplePhysicsGame
 				initTime = lastTime;
 				// A half a second have passed. We must verify the velocities.
 				currentVelocity = coin.getVelocity(null);
-				System.out.println("DEBUG: Vector Velocidad: " + currentVelocity.x + ", "
-					+ currentVelocity.y + ", " + currentVelocity.z);
-				System.out.println("DEBUG: Distancia: " + currentVelocity.distance(new Vector3f()));
+				// System.out.println("DEBUG: Vector Velocidad: " + currentVelocity.x +
+				// ", "
+				// + currentVelocity.y + ", " + currentVelocity.z);
+				// System.out.println("DEBUG: Distancia: " + currentVelocity.distance(new
+				// Vector3f()));
 				if (isCoinStopped())
 				{
 					coinInMovement = false;
@@ -211,33 +213,37 @@ public class TgosMain extends SimplePhysicsGame
 
 					// we must check if is touching a box
 					Integer lastPoints = sapo.getPoints(coin);
-					System.out.println("DEBUG: HIZO " + sapo.getPoints(coin) + " PUNTOS");
+					// System.out.println("DEBUG: HIZO " + sapo.getPoints(coin) +
+					// " PUNTOS");
 					playerScores[playerTurn] += lastPoints;
 					createShootInfoText(lastPoints);
 					initShootTime = timer.getTimeInSeconds();
 
 					// We cannot forget to activate again the mouse
 					deactivateMouseShooting = false;
-					
+
 					// Finally, we check if there was the last shoot
 					if (playerTurn == 0 && (playerShoots[0]) == NUMBEROFSHOOTS)
 					{
 						// The player info text
-						changeTurnText = Text.createDefaultTextLabel("changeTurnText", "Cambio de Turno");
-						changeTurnText.getLocalTranslation().set(display.getWidth() / 2.0f - 250.0f,
-							display.getHeight() / 2.0f + 40.0f, 0);
+						changeTurnText = Text.createDefaultTextLabel("changeTurnText",
+							"Cambio de Turno");
+						changeTurnText.getLocalTranslation().set(
+							display.getWidth() / 2.0f - 250.0f, display.getHeight() / 2.0f + 40.0f,
+							0);
 						changeTurnText.getLocalScale().set(3.0f, 3.0f, 3.0f);
 						changeTurnText.getTextColor().set(0.0f, 1.0f, 0.0f, 1.0f);
 						statNode.attachChild(changeTurnText);
-						
+
 						// The winner info text
-						changeTurn2Text = Text.createDefaultTextLabel("changeTurn2Text", "Haga click para continuar");
+						changeTurn2Text = Text.createDefaultTextLabel("changeTurn2Text",
+							"Haga click para continuar");
 						changeTurn2Text.getLocalTranslation().set(Vector3f.ZERO);
 						changeTurn2Text.getLocalScale().set(1.5f, 1.5f, 1.5f);
 						changeTurn2Text.getTextColor().set(0.0f, 0.0f, 0.0f, 1.0f);
 						statNode.attachChild(changeTurn2Text);
 					}
-					else if (playerTurn == 1 && (playerShoots[0]) == NUMBEROFSHOOTS)
+					else if (playerTurn == 1 && (playerShoots[1]) == NUMBEROFSHOOTS)
 					{
 						finishGame();
 					}
@@ -318,13 +324,14 @@ public class TgosMain extends SimplePhysicsGame
 		statNode.attachChild(winnerInfoText);
 
 		input.removeAllActions();
-		
+
 		// Add and action to start again.
 		input.addAction(new NewGameAction(), InputHandler.DEVICE_KEYBOARD, KeyInput.KEY_SPACE,
 			InputHandler.AXIS_NONE, false);
 
 		// The winner info text
-		newGameInfoText = Text.createDefaultTextLabel("newGameInfoText", "Pulse la tecla espacio para empezar un nuevo juego");
+		newGameInfoText = Text.createDefaultTextLabel("newGameInfoText",
+			"Pulse la tecla espacio para empezar un nuevo juego");
 		newGameInfoText.getLocalTranslation().set(Vector3f.ZERO);
 		newGameInfoText.getLocalScale().set(1.5f, 1.5f, 1.5f);
 		newGameInfoText.getTextColor().set(0.0f, 0.0f, 0.0f, 1.0f);
@@ -372,19 +379,18 @@ public class TgosMain extends SimplePhysicsGame
 				// We cannot do anything
 				return;
 			}
-			
+
 			// Change turnos o game over? With this, we disable the shoot.
 			if (playerTurn == 0 && (playerShoots[playerTurn]) == NUMBEROFSHOOTS)
 			{
 				changeTurns();
-				return ;
+				return;
 			}
 			else if (playerTurn == 1 && (playerShoots[playerTurn]) == NUMBEROFSHOOTS)
 			{
 				// Game Over!
-				return ;
+				return;
 			}
-			
 
 			if (!playerIsThrowing)
 			{
@@ -406,9 +412,8 @@ public class TgosMain extends SimplePhysicsGame
 				// We must scale the power to our scale, between min and max power.
 				Float power = (finishMoment.getTime() - initMoment.getTime()) * MULTPOWER;
 
-				// Debug
-				System.out.println("La resta de tiempos es: "
-					+ (finishMoment.getTime() - initMoment.getTime()));
+				// System.out.println("La resta de tiempos es: " + (finishMoment.getTime()
+				// - initMoment.getTime()));
 
 				if (power < MINPOWER)
 				{
@@ -431,12 +436,11 @@ public class TgosMain extends SimplePhysicsGame
 				initMoment = new Date();
 				playerShoots[playerTurn]++;
 
-				// DEBUG
-				System.out.println("POWA: " + power);
-				System.out.println("La direccion es: " + cam.getDirection());
-				System.out.println("Potencia Aplicada: " + power);
-				System.out.println("La fuerza aplicada es es: " + shootForce
-					+ " y posición inicial: " + shootOrigin);
+				// System.out.println("POWA: " + power);
+				// System.out.println("La direccion es: " + cam.getDirection());
+				// System.out.println("Potencia Aplicada: " + power);
+				// System.out.println("La fuerza aplicada es es: " + shootForce +
+				// " y posición inicial: " + shootOrigin);
 
 				// The throw has finish
 				playerIsThrowing = false;
@@ -461,7 +465,7 @@ public class TgosMain extends SimplePhysicsGame
 			statNode.detachChild(gameOverText);
 			statNode.detachChild(winnerInfoText);
 			statNode.detachChild(newGameInfoText);
-			
+
 			initActions();
 			makeTexts();
 		}

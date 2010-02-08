@@ -240,15 +240,6 @@ public class Sapo extends SapoElement
 		final Box upperBoxesFront = new Box("upperBoxesFront", upperPoint.add(0, boxesHigh,
 			boxesLength), sapoWidth, boxesHigh, boxesThick);
 		sapoStaticNode.attachChild(upperBoxesFront);
-
-		// DEBUG DELETE ME
-		System.out.println("DEBUG: lowerBoxesFloor tiene numero: "
-			+ sapoStaticNode.getChildIndex(lowerBoxesFloor));
-		System.out.println("DEBUG: middleBoxesFloor tiene numero: "
-			+ sapoStaticNode.getChildIndex(middleBoxesFloor));
-		System.out.println("DEBUG: upperBoxesFloor tiene numero: "
-			+ sapoStaticNode.getChildIndex(upperBoxesFloor));
-
 	}
 
 	/*
@@ -511,7 +502,6 @@ public class Sapo extends SapoElement
 		// Now, we must see wich box has touched. we start with the leftmost box.
 		if (coinPosition.x > start.x && coinPosition.x < limit.x)
 		{
-			System.out.println("DEBUG: Tocó la caja de la izquierda");
 			return Boxes.LEFT;
 		}
 		
@@ -520,7 +510,6 @@ public class Sapo extends SapoElement
 		limit = limit.add(boxesSeparation, 0, 0);
 		if (coinPosition.x > start.x && coinPosition.x < limit.x)
 		{
-			System.out.println("DEBUG: Tocó la caja del medio");
 			return Boxes.MIDDLE;
 		}
 		
@@ -529,7 +518,6 @@ public class Sapo extends SapoElement
 		limit = limit.add(boxesSeparation, 0, 0);
 		if (coinPosition.x > start.x && coinPosition.x < limit.x)
 		{
-			System.out.println("DEBUG: Tocó la caja de la derecha");
 			return Boxes.RIGHT;
 		}
 		
