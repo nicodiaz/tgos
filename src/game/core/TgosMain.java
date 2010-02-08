@@ -27,6 +27,7 @@ public class TgosMain extends SimplePhysicsGame
 	private Float initShootTime = 0.0f;
 	private Vector3f currentVelocity = new Vector3f();
 	private CameraOptions cameraOption = CameraOptions.FreeStyleCamera;
+	private boolean deactivateMouseShooting = false;
 
 	// The players data. In the future, this can be a class.
 	private Integer[] playerScores = { 0, 0 };
@@ -139,6 +140,7 @@ public class TgosMain extends SimplePhysicsGame
 			KeyInput.KEY_3, InputHandler.AXIS_NONE, false);
 		input.addAction(new ResetCameraPositionAction(), InputHandler.DEVICE_KEYBOARD,
 			KeyInput.KEY_4, InputHandler.AXIS_NONE, false);
+
 	}
 
 	private void showAxisRods()
@@ -155,6 +157,11 @@ public class TgosMain extends SimplePhysicsGame
 		// This if is to check if the coin is quiet or not.
 		if (coinInMovement)
 		{
+			if (!deactivateMouseShooting)
+			{
+				deactivateMouseShooting = true;
+			}
+			
 			// We must check if the cam is allright
 			if (cameraOption == CameraOptions.SapoCamera)
 			{
@@ -200,6 +207,10 @@ public class TgosMain extends SimplePhysicsGame
 					playerScores[playerTurn] += lastPoints;
 					createShootInfoText(lastPoints);
 					initShootTime = timer.getTimeInSeconds();
+					
+					// We cannot forget to activate again the mouse
+					deactivateMouseShooting = false;
+					
 				}
 			}
 			else
@@ -259,6 +270,13 @@ public class TgosMain extends SimplePhysicsGame
 		@Override
 		public void performAction(InputActionEvent evt)
 		{
+			
+			if (deactivateMouseShooting)
+			{
+				// We cannot do anything
+				return ;
+			}
+			
 
 			if (!playerIsThrowing)
 			{
@@ -314,6 +332,9 @@ public class TgosMain extends SimplePhysicsGame
 
 				// The throw has finish
 				playerIsThrowing = false;
+				
+				// We disable the mouse
+				deactivateMouseShooting = true;
 			}
 		}
 	}
