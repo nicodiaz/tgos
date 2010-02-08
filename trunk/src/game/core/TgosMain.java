@@ -40,6 +40,7 @@ public class TgosMain extends SimplePhysicsGame
 	// The text information.
 	private Text playerInfoText = null;
 	private Text shootInfoText = new Text();
+	private Text scoreInfoText = new Text();
 	private Text sapoHitText = null;
 
 	// actions variables
@@ -69,43 +70,54 @@ public class TgosMain extends SimplePhysicsGame
 
 	private void makeTexts()
 	{
-		// finally print a key-binding message
+		// The player info text
 		playerInfoText = Text.createDefaultTextLabel("playerInfoText", createPlayerInfoText());
 		playerInfoText.getLocalTranslation().set(0, display.getHeight() - 20.0f, 0);
 		playerInfoText.getLocalScale().set(1.0f, 1.0f, 1.0f);
-		playerInfoText.getTextColor().set(0, 0, 0, 1.0f);
+		playerInfoText.getTextColor().set(1.0f, 0.0f, 0.0f, 1.0f);
 		statNode.attachChild(playerInfoText);
+		
+		// The score of the player
+		scoreInfoText = Text.createDefaultTextLabel("scoreInfoText", createScoreInfoText());
+		scoreInfoText.getLocalTranslation().set(0, display.getHeight() - 50.0f, 0);
+		scoreInfoText.getLocalScale().set(1.0f, 1.0f, 1.0f);
+		scoreInfoText.getTextColor().set(1.0f, 0.0f, 0.0f, 1.0f);
+		statNode.attachChild(scoreInfoText);
+		
+		
 	}
 
 	private String createPlayerInfoText()
 	{
-		return "Turno Jugador " + (playerTurn + 1) + ". Puntos hasta el momento: "
-			+ playerScores[playerTurn] + ". Tiros hasta el momento: " + playerShoots[playerTurn];
-
+		return "Turno Jugador " + (playerTurn + 1) + ". Tiros hasta el momento: " + playerShoots[playerTurn];
 	}
 
+	private String createScoreInfoText()
+	{
+		return "Puntos hasta el momento: " + playerScores[playerTurn];
+	}
+	
 	private void createShootInfoText(Integer lastPoints)
 	{
 		// Text 2d in front of the camera
 
 		shootInfoText = new Text("shootInfoText", lastPoints.toString() + " puntos!!!");
-		shootInfoText.getLocalTranslation().set(display.getWidth() / 2.0f - 50.0f,
+		shootInfoText.getLocalTranslation().set(display.getWidth() / 2.0f - 100.0f,
 			display.getHeight() / 2.0f, 0);
-		shootInfoText.getTextColor().set(1.0f, 0, 0, 1.0f);
+		shootInfoText.getTextColor().set(1.0f, 0, 0.0f, 1.0f);
 		shootInfoText.getLocalScale().set(2.0f, 2.0f, 2.0f);
-		
+
 		statNode.attachChild(shootInfoText);
-		
-		
+
 		if (lastPoints == 150)
 		{
 			sapoHitText = new Text("sapoHitText", "Sapo Hit!!!");
-			sapoHitText.getLocalTranslation().set(shootInfoText.getLocalTranslation().x - 100.0f,
+			sapoHitText.getLocalTranslation().set(display.getWidth() / 2.0f - 150.0f,
 				shootInfoText.getLocalTranslation().y - 50.0f, 0);
 			sapoHitText.getTextColor().set(0.0f, 1.0f, 0, 1.0f);
 			sapoHitText.getLocalScale().set(3.0f, 3.0f, 3.0f);
-			
-			statNode.attachChild(sapoHitText);			
+
+			statNode.attachChild(sapoHitText);
 		}
 
 	}
@@ -194,11 +206,12 @@ public class TgosMain extends SimplePhysicsGame
 
 		// Now, we must update the player information
 		playerInfoText.print(createPlayerInfoText());
+		scoreInfoText.print(createScoreInfoText());
 
 		if (timer.getTimeInSeconds() > (initShootTime + 3.0f))
 		{
 			statNode.detachChild(shootInfoText);
-			
+
 			if (sapoHitText != null)
 			{
 				statNode.detachChild(sapoHitText);
