@@ -2,13 +2,19 @@ package game.elements;
 
 import game.utils.SapoConfig;
 
+import java.awt.Font;
+
 import com.jme.bounding.BoundingBox;
 import com.jme.math.FastMath;
 import com.jme.math.Vector3f;
+import com.jme.renderer.ColorRGBA;
 import com.jme.scene.Node;
 import com.jme.scene.Spatial;
 import com.jme.scene.shape.Box;
+import com.jme.scene.state.CullState;
 import com.jme.system.DisplaySystem;
+import com.jmex.font3d.Font3D;
+import com.jmex.font3d.Text3D;
 import com.jmex.physics.PhysicsSpace;
 import com.jmex.physics.StaticPhysicsNode;
 import com.jmex.physics.material.Material;
@@ -21,7 +27,7 @@ import com.jmex.physics.material.Material;
  */
 public class Sapo extends SapoElement
 {
-	
+
 	/*
 	 * Sapo Scene Variables
 	 */
@@ -49,6 +55,7 @@ public class Sapo extends SapoElement
 	// Other measures
 	private Float backWallHeight = 3.0f;
 	private Float littleSapoScale = 3.0f;
+	private Float pointsTextSize = 1.5f;
 
 	/*
 	 * Now, begin the internal Sapo variables, to work with the class
@@ -59,30 +66,28 @@ public class Sapo extends SapoElement
 	private Integer lowerBoxesFloorIndex = 0;
 	private Integer middleBoxesFloorIndex = 0;
 	private Integer upperBoxesFloorIndex = 0;
-	
+
 	// the separation between boxes.
 	private Float boxesSeparation = (2 * sapoWidth) / 3.0f;
 	final private Float sapoZMid = (sapoFront + sapoBack) / 2.0f;
 	// As the width and the heigth are equals, the tg is PI / 4 = 45*
 	private Float innerFallsInclination = FastMath.PI / 4.0f;
-	
+
 	// And the location of this little sapo, for the camera on it
 	SapoLittle sapoLittle = null;
-	
-	
+
+	// Font decoration for the points.
+	private Font3D sapoFont = new Font3D(new Font("Arial", Font.PLAIN, 2), 0.1, true, true, true);
+
 	/**
-	 *  This Enum is to identify every box. Remember, the LOWER_MIDDLE is the SAPO box.
+	 * This Enum is to identify every box. Remember, the LOWER_MIDDLE is the SAPO box.
 	 */
 	public enum Boxes
 	{
-		LOWER, MIDDLE, UPPER,
-		LEFT, RIGHT,
-		LOWER_LEFT, SAPO, LOWER_RIGHT,
-		MIDDLE_LEFT, MIDDLE_MIDDLE, MIDDLE_RIGHT,
-		UPPER_LEFT, UPPER_MIDDLE, UPPER_RIGHT,
-		OUT //This is when no box was touched.
+		LOWER, MIDDLE, UPPER, LEFT, RIGHT, LOWER_LEFT, SAPO, LOWER_RIGHT, MIDDLE_LEFT, MIDDLE_MIDDLE, MIDDLE_RIGHT, UPPER_LEFT, UPPER_MIDDLE, UPPER_RIGHT, OUT
+		// This is when no box was touched.
 	}
-	
+
 	public Sapo(PhysicsSpace theSpace, Node rootNode, DisplaySystem disp)
 	{
 		super(theSpace, rootNode, disp);
@@ -91,7 +96,7 @@ public class Sapo extends SapoElement
 		sapoStaticNode.setModelBound(new BoundingBox());
 		sapoStaticNode.updateModelBound();
 		rootNode.attachChild(sapoStaticNode);
-		
+
 		// Recover the scene data from the XML file
 		setupSceneData();
 
@@ -117,11 +122,11 @@ public class Sapo extends SapoElement
 		this(theSpace, rootNode, disp);
 		sapoStaticNode.getLocalTranslation().set(center);
 	}
-	
+
 	private void setupSceneData()
 	{
 		SapoConfig config = SapoConfig.getInstance();
-		
+
 		sapoWidth = config.getSapoWidth();
 		sapoHeight = config.getSapoHeight();
 		sapoThick = config.getSapoThick();
@@ -137,6 +142,7 @@ public class Sapo extends SapoElement
 		topLongLinesSeparation = config.getTopLongLinesSeparation();
 		backWallHeight = config.getBackWallHeight();
 		littleSapoScale = config.getLittleSapoScale();
+		pointsTextSize = config.getPointsTextSize();
 	}
 
 	/*
@@ -163,7 +169,7 @@ public class Sapo extends SapoElement
 			+ boxesLength);
 		sapoStaticNode.attachChild(rightSapoWall);
 
-//		Float incX = (2 * sapoWidth) / 3.0f;
+		// Float incX = (2 * sapoWidth) / 3.0f;
 		Float incX = boxesSeparation;
 		// The inner right of the box.
 		final Box innerRightSapoWall = new Box("innerRightSapoWall", new Vector3f(sapoWidth - incX,
@@ -237,8 +243,9 @@ public class Sapo extends SapoElement
 			boxesLength);
 		sapoStaticNode.attachChild(lowerBoxesFloor);
 		lowerBoxesFloorIndex = sapoStaticNode.getChildIndex(lowerBoxesFloor);
-		final Box lowerBoxesFront = new Box("lowerBoxesFront", lowerPoint.add(0, boxesHigh,
-			boxesLength), sapoWidth, boxesHigh, boxesThick);
+		final Box lowerBoxesFront = new Box("lowerBoxesFront", new Vector3f(), sapoWidth,
+			boxesHigh, boxesThick);
+		lowerBoxesFront.getLocalTranslation().set(lowerPoint.add(0, boxesHigh, boxesLength));
 		sapoStaticNode.attachChild(lowerBoxesFront);
 
 		/*
@@ -250,8 +257,9 @@ public class Sapo extends SapoElement
 			boxesThick, boxesLength);
 		sapoStaticNode.attachChild(middleBoxesFloor);
 		middleBoxesFloorIndex = sapoStaticNode.getChildIndex(middleBoxesFloor);
-		final Box middleBoxesFront = new Box("middleBoxesFront", middlePoint.add(0, boxesHigh,
-			boxesLength), sapoWidth, boxesHigh, boxesThick);
+		final Box middleBoxesFront = new Box("middleBoxesFront", new Vector3f(), sapoWidth,
+			boxesHigh, boxesThick);
+		middleBoxesFront.getLocalTranslation().set(middlePoint.add(0, boxesHigh, boxesLength));
 		sapoStaticNode.attachChild(middleBoxesFront);
 
 		/*
@@ -262,11 +270,109 @@ public class Sapo extends SapoElement
 			boxesLength);
 		sapoStaticNode.attachChild(upperBoxesFloor);
 		upperBoxesFloorIndex = sapoStaticNode.getChildIndex(upperBoxesFloor);
-		final Box upperBoxesFront = new Box("upperBoxesFront", upperPoint.add(0, boxesHigh,
-			boxesLength), sapoWidth, boxesHigh, boxesThick);
+		final Box upperBoxesFront = new Box("upperBoxesFront", new Vector3f(), sapoWidth,
+			boxesHigh, boxesThick);
+		upperBoxesFront.getLocalTranslation().set(upperPoint.add(0, boxesHigh, boxesLength));
 		sapoStaticNode.attachChild(upperBoxesFront);
+		
+		
+		// Now that the boxes are builded, we add the text
+		makePointsTexts(lowerBoxesFront, middleBoxesFront, upperBoxesFront);
+		
 	}
 
+	private void makePointsTexts(Box lowerBoxesFront, Box middleBoxesFront, Box upperBoxesFront)
+	{
+		Text3D lowerLeftBoxesText = sapoFont.createText("100", pointsTextSize, 0);
+		lowerLeftBoxesText.setFontColor(new ColorRGBA(1.0f, 0, 0, 1.0f));
+		lowerLeftBoxesText.getLocalTranslation().set(lowerBoxesFront.getLocalTranslation().add(-sapoWidth + 2.0f, 0, 2.0f * boxesThick));
+		lowerLeftBoxesText.setModelBound(new BoundingBox());
+		lowerLeftBoxesText.updateModelBound();
+		rootNode.attachChild(lowerLeftBoxesText);
+		lowerLeftBoxesText.setCullHint(Spatial.CullHint.Dynamic);
+		lowerLeftBoxesText.updateRenderState();
+		
+		Text3D lowerCenterBoxesText = sapoFont.createText("150", pointsTextSize, 0);
+		lowerCenterBoxesText.setFontColor(new ColorRGBA(1.0f, 0, 0, 1.0f));
+		lowerCenterBoxesText.getLocalTranslation().set(lowerBoxesFront.getLocalTranslation().add(-1.0f, 0, 2.0f * boxesThick));
+		lowerCenterBoxesText.setModelBound(new BoundingBox());
+		lowerCenterBoxesText.updateModelBound();
+		rootNode.attachChild(lowerCenterBoxesText);
+		lowerCenterBoxesText.setCullHint(Spatial.CullHint.Dynamic);
+		lowerCenterBoxesText.updateRenderState();
+		
+		Text3D lowerRightBoxesText = sapoFont.createText("100", pointsTextSize, 0);
+		lowerRightBoxesText.setFontColor(new ColorRGBA(1.0f, 0, 0, 1.0f));
+		lowerRightBoxesText.getLocalTranslation().set(lowerBoxesFront.getLocalTranslation().add(sapoWidth - 3 * pointsTextSize, 0, 2.0f * boxesThick));
+		lowerRightBoxesText.setModelBound(new BoundingBox());
+		lowerRightBoxesText.updateModelBound();
+		rootNode.attachChild(lowerRightBoxesText);
+		lowerRightBoxesText.setCullHint(Spatial.CullHint.Dynamic);
+		lowerRightBoxesText.updateRenderState();
+		
+		Text3D middleLeftBoxesText = sapoFont.createText("80", pointsTextSize, 0);
+		middleLeftBoxesText.setFontColor(new ColorRGBA(1.0f, 0, 0, 1.0f));
+		middleLeftBoxesText.getLocalTranslation().set(middleBoxesFront.getLocalTranslation().add(-sapoWidth + 2.0f, 0, 2.0f * boxesThick));
+		middleLeftBoxesText.setModelBound(new BoundingBox());
+		middleLeftBoxesText.updateModelBound();
+		rootNode.attachChild(middleLeftBoxesText);
+		middleLeftBoxesText.setCullHint(Spatial.CullHint.Dynamic);
+		middleLeftBoxesText.updateRenderState();
+		
+		Text3D middleCenterBoxesText = sapoFont.createText("100", pointsTextSize, 0);
+		middleCenterBoxesText.setFontColor(new ColorRGBA(1.0f, 0, 0, 1.0f));
+		middleCenterBoxesText.getLocalTranslation().set(middleBoxesFront.getLocalTranslation().add(-1.0f, 0, 2.0f * boxesThick));
+		middleCenterBoxesText.setModelBound(new BoundingBox());
+		middleCenterBoxesText.updateModelBound();
+		rootNode.attachChild(middleCenterBoxesText);
+		middleCenterBoxesText.setCullHint(Spatial.CullHint.Dynamic);
+		middleCenterBoxesText.updateRenderState();
+		
+		Text3D middleRightBoxesText = sapoFont.createText("80", pointsTextSize, 0);
+		middleRightBoxesText.setFontColor(new ColorRGBA(1.0f, 0, 0, 1.0f));
+		middleRightBoxesText.getLocalTranslation().set(middleBoxesFront.getLocalTranslation().add(sapoWidth - 3 * pointsTextSize, 0, 2.0f * boxesThick));
+		middleRightBoxesText.setModelBound(new BoundingBox());
+		middleRightBoxesText.updateModelBound();
+		rootNode.attachChild(middleRightBoxesText);
+		middleRightBoxesText.setCullHint(Spatial.CullHint.Dynamic);
+		middleRightBoxesText.updateRenderState();
+		
+		Text3D upperLeftBoxesText = sapoFont.createText("60", pointsTextSize, 0);
+		upperLeftBoxesText.setFontColor(new ColorRGBA(1.0f, 0, 0, 1.0f));
+		upperLeftBoxesText.getLocalTranslation().set(upperBoxesFront.getLocalTranslation().add(-sapoWidth + 2.0f, 0, 2.0f * boxesThick));
+		upperLeftBoxesText.setModelBound(new BoundingBox());
+		upperLeftBoxesText.updateModelBound();
+		rootNode.attachChild(upperLeftBoxesText);
+		upperLeftBoxesText.setCullHint(Spatial.CullHint.Dynamic);
+		upperLeftBoxesText.updateRenderState();
+		
+		Text3D upperCenterBoxesText = sapoFont.createText("80", pointsTextSize, 0);
+		upperCenterBoxesText.setFontColor(new ColorRGBA(1.0f, 0, 0, 1.0f));
+		upperCenterBoxesText.getLocalTranslation().set(upperBoxesFront.getLocalTranslation().add(-1.0f, 0, 2.0f * boxesThick));
+		upperCenterBoxesText.setModelBound(new BoundingBox());
+		upperCenterBoxesText.updateModelBound();
+		rootNode.attachChild(upperCenterBoxesText);
+		upperCenterBoxesText.setCullHint(Spatial.CullHint.Dynamic);
+		upperCenterBoxesText.updateRenderState();
+		
+		Text3D upperRightBoxesText = sapoFont.createText("60", pointsTextSize, 0);
+		upperRightBoxesText.setFontColor(new ColorRGBA(1.0f, 0, 0, 1.0f));
+		upperRightBoxesText.getLocalTranslation().set(upperBoxesFront.getLocalTranslation().add(sapoWidth - 3 * pointsTextSize, 0, 2.0f * boxesThick));
+		upperRightBoxesText.setModelBound(new BoundingBox());
+		upperRightBoxesText.updateModelBound();
+		rootNode.attachChild(upperRightBoxesText);
+		upperRightBoxesText.setCullHint(Spatial.CullHint.Dynamic);
+		upperRightBoxesText.updateRenderState();
+		
+        // And to make sure text is OK we add some backface culling
+        CullState bfculling = DisplaySystem.getDisplaySystem().getRenderer()
+                .createCullState();
+        bfculling.setCullFace(CullState.Face.Back);
+        rootNode.setRenderState(bfculling);
+        rootNode.setCullHint(Spatial.CullHint.Never);
+	}
+	
+	
 	/*
 	 * Method responsible of creating the top of the Sapo box. Have the holes and the sapo
 	 * itself.
@@ -408,14 +514,16 @@ public class Sapo extends SapoElement
 
 	/**
 	 * This method is to recover the points that the player have done.
-	 * @param coin The throwed coin.
+	 * 
+	 * @param coin
+	 *            The throwed coin.
 	 * @return The number indication the points. If no point was made, then return 0.
 	 */
 	public Integer getPoints(Coin coin)
 	{
 		Boxes boxTouched = isTouching(coin);
 		Integer points = 0;
-		
+
 		switch (boxTouched)
 		{
 		case LOWER_LEFT:
@@ -450,16 +558,15 @@ public class Sapo extends SapoElement
 			points = 0;
 			break;
 		}
-		
+
 		return points;
 	}
-	
-	
+
 	public Boxes isTouching(Coin coin)
 	{
 		Spatial anotherObject = coin.getPhysicCoin();
 		Boxes result = null;
-		
+
 		/*
 		 * The engine have a bug. If i use the getChild with names and detect collisions,
 		 * the method is not working. The same happen if I use the node. The only way to
@@ -473,14 +580,14 @@ public class Sapo extends SapoElement
 			result = getTouchedBox(coin);
 			switch (result)
 			{
-				case LEFT:
-					return Boxes.LOWER_LEFT;
-				case MIDDLE:
-					return Boxes.SAPO;
-				case RIGHT:
-					return Boxes.LOWER_RIGHT;
-				default:
-					return Boxes.OUT;
+			case LEFT:
+				return Boxes.LOWER_LEFT;
+			case MIDDLE:
+				return Boxes.SAPO;
+			case RIGHT:
+				return Boxes.LOWER_RIGHT;
+			default:
+				return Boxes.OUT;
 			}
 		}
 
@@ -489,14 +596,14 @@ public class Sapo extends SapoElement
 			result = getTouchedBox(coin);
 			switch (result)
 			{
-				case LEFT:
-					return Boxes.MIDDLE_LEFT;
-				case MIDDLE:
-					return Boxes.MIDDLE_MIDDLE;
-				case RIGHT:
-					return Boxes.MIDDLE_RIGHT;
-				default:
-					return Boxes.OUT;
+			case LEFT:
+				return Boxes.MIDDLE_LEFT;
+			case MIDDLE:
+				return Boxes.MIDDLE_MIDDLE;
+			case RIGHT:
+				return Boxes.MIDDLE_RIGHT;
+			default:
+				return Boxes.OUT;
 			}
 		}
 
@@ -505,32 +612,32 @@ public class Sapo extends SapoElement
 			result = getTouchedBox(coin);
 			switch (result)
 			{
-				case LEFT:
-					return Boxes.UPPER_LEFT;
-				case MIDDLE:
-					return Boxes.UPPER_MIDDLE;
-				case RIGHT:
-					return Boxes.UPPER_RIGHT;
-				default:
-					return Boxes.OUT;
+			case LEFT:
+				return Boxes.UPPER_LEFT;
+			case MIDDLE:
+				return Boxes.UPPER_MIDDLE;
+			case RIGHT:
+				return Boxes.UPPER_RIGHT;
+			default:
+				return Boxes.OUT;
 			}
 		}
-		
+
 		return Boxes.OUT;
 	}
-	
+
 	private Boxes getTouchedBox(Coin coin)
 	{
 		Vector3f coinPosition = coin.getLocation();
 		Vector3f start = new Vector3f(-sapoWidth, 0, 0);
 		Vector3f limit = start.add(boxesSeparation, 0, 0);
-		
+
 		// Now, we must see wich box has touched. we start with the leftmost box.
 		if (coinPosition.x > start.x && coinPosition.x < limit.x)
 		{
 			return Boxes.LEFT;
 		}
-		
+
 		// The middle box
 		start = limit;
 		limit = limit.add(boxesSeparation, 0, 0);
@@ -538,7 +645,7 @@ public class Sapo extends SapoElement
 		{
 			return Boxes.MIDDLE;
 		}
-		
+
 		// If the cases before fails, is the right box
 		start = limit;
 		limit = limit.add(boxesSeparation, 0, 0);
@@ -546,10 +653,10 @@ public class Sapo extends SapoElement
 		{
 			return Boxes.RIGHT;
 		}
-		
+
 		return Boxes.OUT;
 	}
-	
+
 	public Vector3f getLittleSapoPosition()
 	{
 		return sapoLittle.getLocation();

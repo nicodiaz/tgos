@@ -114,7 +114,7 @@ public class TgosMain extends SimplePhysicsGame
 		shootInfoText = new Text("shootInfoText", lastPoints.toString() + " puntos!!!");
 		shootInfoText.getLocalTranslation().set(display.getWidth() / 2.0f - 100.0f,
 			display.getHeight() / 2.0f, 0);
-		shootInfoText.getTextColor().set(1.0f, 0, 0.0f, 1.0f);
+		shootInfoText.getTextColor().set(174.0f / 255.0f, 94.0f / 255.0f, 1.0f, 1.0f);
 		shootInfoText.getLocalScale().set(2.0f, 2.0f, 2.0f);
 
 		statNode.attachChild(shootInfoText);
