@@ -103,6 +103,16 @@ public class TgosMain extends SimplePhysicsGame
 		scoreInfoText.getTextColor().set(1.0f, 0.0f, 0.0f, 1.0f);
 		statNode.attachChild(scoreInfoText);
 
+		// Game Information Text
+		Text gameInfoText1 = Text.createDefaultTextLabel("gameInfoText3", "[3] Moneda-Cam. [4] Reset Cam. [m] Detener/Continuar musica");
+		gameInfoText1.getLocalTranslation().set(Vector3f.ZERO);
+		statNode.attachChild(gameInfoText1);
+		Text gameInfoText2 = Text.createDefaultTextLabel("gameInfoText2", "[z]Abajo. [w]Adelante. [s]Retroceder. [1]FreeStyle-Cam. [2]Sapo-Cam.");
+		gameInfoText2.getLocalTranslation().set(gameInfoText1.getLocalTranslation().add(0, 17, 0));
+		statNode.attachChild(gameInfoText2);
+		Text gameInfoText3 = Text.createDefaultTextLabel("gameInfoText1", "[Boton Izq Mouse]: Disparo. [a]Izquierda. [d]Derecha. [q]Arriba.");
+		gameInfoText3.getLocalTranslation().set(gameInfoText2.getLocalTranslation().add(0,17,0));
+		statNode.attachChild(gameInfoText3);
 	}
 
 	private String createPlayerInfoText()
@@ -158,7 +168,7 @@ public class TgosMain extends SimplePhysicsGame
 			KeyInput.KEY_3, InputHandler.AXIS_NONE, false);
 		input.addAction(new ResetCameraPositionAction(), InputHandler.DEVICE_KEYBOARD,
 			KeyInput.KEY_4, InputHandler.AXIS_NONE, false);
-		
+
 		// The music action
 		input.addAction(new PauseAndContinueMusicAction(), InputHandler.DEVICE_KEYBOARD,
 			KeyInput.KEY_M, InputHandler.AXIS_NONE, false);
@@ -531,25 +541,23 @@ public class TgosMain extends SimplePhysicsGame
 
 	private class PauseAndContinueMusicAction extends InputAction
 	{
-		
+
 		@Override
 		public void performAction(InputActionEvent evt)
 		{
-			
+
 			if (evt.getTriggerPressed())
 			{
 				if (sapoSounds.isPlaying())
 				{
-					System.out.println("retorno is playing papa");
 					sapoSounds.stop();
 				}
 				else
 				{
-					System.out.println("retorno NO is playing papa");
 					sapoSounds.play();
 				}
 			}
-			
+
 		}
 
 	}
