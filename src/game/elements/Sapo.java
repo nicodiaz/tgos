@@ -396,6 +396,8 @@ public class Sapo extends SapoElement
 		final Box transversalLine4 = new Box("transversalLine4", new Vector3f(), sapoWidth,
 			topLineThick, topLineDeep);
 		transversalLine4.getLocalTranslation().set(transStartingPoint);
+		transversalLine4.setModelBound(new BoundingBox());
+		transversalLine4.updateModelBound();
 		sapoStaticNode.attachChild(transversalLine4);
 
 		// 3rd Transversal Line
@@ -403,6 +405,8 @@ public class Sapo extends SapoElement
 			topLineThick, topLineDeep);
 		transversalLine3.getLocalTranslation().set(
 			transStartingPoint.add(0, 0, topTranLinesSeparation));
+		transversalLine3.setModelBound(new BoundingBox());
+		transversalLine3.updateModelBound();
 		sapoStaticNode.attachChild(transversalLine3);
 
 		// 2nd Transversal Line
@@ -410,6 +414,8 @@ public class Sapo extends SapoElement
 			topLineThick, topLineDeep);
 		transversalLine2.getLocalTranslation().set(
 			transStartingPoint.add(0, 0, (2.0f * topTranLinesSeparation)));
+		transversalLine2.setModelBound(new BoundingBox());
+		transversalLine2.updateModelBound();
 		sapoStaticNode.attachChild(transversalLine2);
 
 		// first (front) line
@@ -417,6 +423,8 @@ public class Sapo extends SapoElement
 			topLineThick, topLineDeep);
 		transversalLine1.getLocalTranslation().set(
 			transStartingPoint.add(0, 0, (3.0f * topTranLinesSeparation)));
+		transversalLine1.setModelBound(new BoundingBox());
+		transversalLine1.updateModelBound();
 		sapoStaticNode.attachChild(transversalLine1);
 
 	}
@@ -434,12 +442,16 @@ public class Sapo extends SapoElement
 		final Box longTopLine1 = new Box("longTopLine1", new Vector3f(), topLineDeep, topLineThick,
 			(sapoBack - sapoZMid));
 		longTopLine1.getLocalTranslation().set(longStartingPoint);
+		longTopLine1.setModelBound(new BoundingBox());
+		longTopLine1.updateModelBound();
 		sapoStaticNode.attachChild(longTopLine1);
 
 		// 2nd Line line
 		final Box longTopLine2 = new Box("longTopLine2", new Vector3f(), topLineDeep, topLineThick,
 			(sapoBack - sapoZMid));
 		longTopLine2.getLocalTranslation().set(longStartingPoint.add(topLongLinesSeparation, 0, 0));
+		longTopLine2.setModelBound(new BoundingBox());
+		longTopLine2.updateModelBound();
 		sapoStaticNode.attachChild(longTopLine2);
 
 		// 3rd Line line
@@ -448,6 +460,8 @@ public class Sapo extends SapoElement
 		longTopLine3.getLocalTranslation().set(
 			new Vector3f(-(longStartingPoint.x + topLongLinesSeparation), longStartingPoint.y,
 				longStartingPoint.z));
+		longTopLine3.setModelBound(new BoundingBox());
+		longTopLine3.updateModelBound();
 		sapoStaticNode.attachChild(longTopLine3);
 
 		// 4th (last) Line line
@@ -455,6 +469,8 @@ public class Sapo extends SapoElement
 			(sapoBack - sapoZMid));
 		longStartingPoint.x = sapoWidth - topLineDeep; // the inverse of the first point
 		longTopLine4.getLocalTranslation().set(longStartingPoint);
+		longTopLine4.setModelBound(new BoundingBox());
+		longTopLine4.updateModelBound();
 		sapoStaticNode.attachChild(longTopLine4);
 	}
 
@@ -469,6 +485,8 @@ public class Sapo extends SapoElement
 			2.0f * boxesLength);
 		frontTop.getLocalTranslation().set(
 			new Vector3f(0, (sapoHeight + topLineThick), -(sapoFront)));
+		frontTop.setModelBound(new BoundingBox());
+		frontTop.updateModelBound();
 		sapoStaticNode.attachChild(frontTop);
 
 		// The front, that cover the front.
@@ -476,6 +494,8 @@ public class Sapo extends SapoElement
 			boxesThick);
 		frontFront.getLocalTranslation().set(
 			new Vector3f(0, (sapoHeight - 1.5f * boxesHigh), -(sapoFront - 2.0f * boxesLength)));
+		frontFront.setModelBound(new BoundingBox());
+		frontFront.updateModelBound();
 		sapoStaticNode.attachChild(frontFront);
 
 		// The upper back wall.

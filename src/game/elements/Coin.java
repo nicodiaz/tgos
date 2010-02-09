@@ -12,6 +12,7 @@ import com.jme.scene.Spatial;
 import com.jme.system.DisplaySystem;
 import com.jmex.physics.DynamicPhysicsNode;
 import com.jmex.physics.PhysicsSpace;
+import com.jmex.physics.contact.MutableContactInfo;
 import com.jmex.physics.material.Material;
 
 // TODO: Change the 3ds model for a jme primitive (cylinder)
@@ -52,6 +53,15 @@ public class Coin extends SapoElement
 
 		// The coin material must be some sort of metal.
 		coinDynamicNode.setMaterial(Material.IRON);
+		
+//		final Material customMaterial = new Material("metalCoin");
+//		customMaterial.setDensity(7.8f);
+//		MutableContactInfo contactDetails = new MutableContactInfo();
+//		contactDetails.setBounce(0.1f);
+//		contactDetails.setMu(0.01f);
+//		customMaterial.putContactHandlingDetails(Material.DEFAULT, contactDetails);
+//		coinDynamicNode.setMaterial(customMaterial);
+		
 
 		coinDynamicNode.setModelBound(new BoundingBox());
 		coinDynamicNode.updateModelBound();
