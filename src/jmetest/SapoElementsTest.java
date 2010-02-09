@@ -15,7 +15,6 @@ import com.jme.scene.Spatial;
 import com.jme.util.export.binary.BinaryImporter;
 import com.jme.util.resource.ResourceLocatorTool;
 import com.jme.util.resource.SimpleResourceLocator;
-import com.jmex.model.collada.ColladaImporter;
 import com.jmex.model.converters.X3dToJme;
 import com.jmex.physics.StaticPhysicsNode;
 import com.jmex.physics.util.SimplePhysicsGame;
@@ -170,35 +169,5 @@ public class SapoElementsTest extends SimplePhysicsGame
 	public static Spatial load3ds(String modelPath)
 	{
 		return load3ds(modelPath, null);
-	}
-
-	public Spatial loadCollada(String modelPath)
-	{
-		Spatial output = null; // the geometry will go here.
-		Spatial collada = null;
-		// Geometry output = null;
-
-		/*
-		 * byte array streams don't have to be closed
-		 */
-		final ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-		try
-		{
-			// read .3ds file into memory & convert it to a jME usable format.
-			final FileInputStream rawIn = new FileInputStream(modelPath);
-
-			ColladaImporter.load(rawIn, modelPath);
-			collada = ColladaImporter.getModel();
-			ColladaImporter.cleanUp();
-
-			collada.updateGeometricState(0, true);
-			collada.updateRenderState();
-		}
-		catch (Exception e)
-		{
-
-		}
-
-		return collada;
 	}
 }
