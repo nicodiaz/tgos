@@ -27,7 +27,7 @@ public class TgosMain extends SimplePhysicsGame
 	private Date lastTime = null;
 	private Float initShootTime = 0.0f;
 	private Vector3f currentVelocity = new Vector3f();
-	private CameraOptions cameraOption = CameraOptions.FreeStyleCamera;
+	private CameraOptions cameraOption = CameraOptions.FollowCamera;
 	private boolean deactivateMouseShooting = false;
 
 	// The players data. In the future, this can be a class.
@@ -65,7 +65,7 @@ public class TgosMain extends SimplePhysicsGame
 	{
 		Logger.getLogger("").log(Level.WARNING, "Cargando Juego. Por favor espere...");
 		// For debug, we set the axis.
-		// showAxisRods();
+//		 showAxisRods();
 
 		// We start creating the room
 		Room room = new Room(getPhysicsSpace(), rootNode, display);
@@ -77,6 +77,13 @@ public class TgosMain extends SimplePhysicsGame
 		initActions();
 		makeTexts();
 		setupSounds();
+		
+		// The starting point of the camera
+//		cam.getLocation().setY(20);
+		cam.setLocation(new Vector3f(0, 20f, 5f));
+		cam.update();
+		
+		
 		Logger.getLogger("").log(Level.WARNING, "Juego cargado. Enjoy!");
 
 	}
@@ -104,14 +111,17 @@ public class TgosMain extends SimplePhysicsGame
 		statNode.attachChild(scoreInfoText);
 
 		// Game Information Text
-		Text gameInfoText1 = Text.createDefaultTextLabel("gameInfoText3", "[3] Moneda-Cam. [4] Reset Cam. [m] Detener/Continuar musica");
+		Text gameInfoText1 = Text.createDefaultTextLabel("gameInfoText3",
+			"[3]Moneda-Cam. [4]Reset Cam. [5]Follow-Cam [m]Detener/Continuar musica");
 		gameInfoText1.getLocalTranslation().set(Vector3f.ZERO);
 		statNode.attachChild(gameInfoText1);
-		Text gameInfoText2 = Text.createDefaultTextLabel("gameInfoText2", "[z]Abajo. [w]Adelante. [s]Retroceder. [1]FreeStyle-Cam. [2]Sapo-Cam.");
+		Text gameInfoText2 = Text.createDefaultTextLabel("gameInfoText2",
+			"[z]Abajo. [w]Adelante. [s]Retroceder. [1]FreeStyle-Cam. [2]Sapo-Cam.");
 		gameInfoText2.getLocalTranslation().set(gameInfoText1.getLocalTranslation().add(0, 17, 0));
 		statNode.attachChild(gameInfoText2);
-		Text gameInfoText3 = Text.createDefaultTextLabel("gameInfoText1", "[Boton Izq Mouse]: Disparo. [a]Izquierda. [d]Derecha. [q]Arriba.");
-		gameInfoText3.getLocalTranslation().set(gameInfoText2.getLocalTranslation().add(0,17,0));
+		Text gameInfoText3 = Text.createDefaultTextLabel("gameInfoText1",
+			"[Boton Izq Mouse]: Disparo. [a]Izquierda. [d]Derecha. [q]Arriba.");
+		gameInfoText3.getLocalTranslation().set(gameInfoText2.getLocalTranslation().add(0, 17, 0));
 		statNode.attachChild(gameInfoText3);
 	}
 
@@ -168,6 +178,8 @@ public class TgosMain extends SimplePhysicsGame
 			KeyInput.KEY_3, InputHandler.AXIS_NONE, false);
 		input.addAction(new ResetCameraPositionAction(), InputHandler.DEVICE_KEYBOARD,
 			KeyInput.KEY_4, InputHandler.AXIS_NONE, false);
+		input.addAction(new ChangeCameraToFollowAction(), InputHandler.DEVICE_KEYBOARD,
+			KeyInput.KEY_5, InputHandler.AXIS_NONE, false);
 
 		// The music action
 		input.addAction(new PauseAndContinueMusicAction(), InputHandler.DEVICE_KEYBOARD,
@@ -209,6 +221,10 @@ public class TgosMain extends SimplePhysicsGame
 				cam.getLocation().set(coin.getLocation());
 				cam.update();
 			}
+			else if (cameraOption == CameraOptions.FollowCamera)
+			{
+				cam.lookAt(coin.getLocation(), Vector3f.UNIT_Y);
+			}
 
 			lastTime = new Date();
 			long timeDiff = lastTime.getTime() - initTime.getTime();
@@ -227,7 +243,8 @@ public class TgosMain extends SimplePhysicsGame
 				{
 					coinInMovement = false;
 
-					if (cameraOption != CameraOptions.FreeStyleCamera)
+					if (cameraOption != CameraOptions.FreeStyleCamera
+						&& cameraOption != CameraOptions.FollowCamera)
 					{
 						// We must restore the camera to the start point
 						cam.getLocation().set(Vector3f.ZERO);
@@ -522,6 +539,16 @@ public class TgosMain extends SimplePhysicsGame
 		public void performAction(InputActionEvent evt)
 		{
 			cameraOption = CameraOptions.CoinCamera;
+		}
+	}
+
+	private class ChangeCameraToFollowAction extends InputAction
+	{
+
+		@Override
+		public void performAction(InputActionEvent evt)
+		{
+			cameraOption = CameraOptions.FollowCamera;
 		}
 	}
 

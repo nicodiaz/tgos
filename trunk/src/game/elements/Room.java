@@ -57,48 +57,42 @@ public class Room extends SapoElement
 		// Recover the scene data from the XML file
 		setupSceneData();
 		
-//		//Now we use the boxes of JME, that are trimeshes. We start with the front Wall. 
+		//Now we use the boxes of JME, that are trimeshes. We start with the front Wall. 
 		final Box frontWallBox = new Box("frontWall", new Vector3f(), roomSize, roomSize, roomThick);
 		room.attachChild(frontWallBox);
 		frontWallBox.getLocalTranslation().set(new Vector3f(0, distanceFromFloor, -roomFar));
-//		color(frontWallBox, new ColorRGBA(102.0f / 255f, 51.0f / 255.0f , 255.0f / 255.0f, 1.0f));
 		applyTextures(frontWallBox, "models/itbaLogo.jpg");
 		
 		
 		final Box backWallBox = new Box("backWallBox", new Vector3f(), roomSize, roomSize, roomThick);
 		room.attachChild(backWallBox);
 		backWallBox.getLocalTranslation().set(new Vector3f(0, distanceFromFloor, roomFar));
-//		color(backWallBox, new ColorRGBA(102.0f / 255f, 51.0f / 255.0f , 255.0f / 255.0f, 1.0f));
 		applyTextures(backWallBox, "models/itbaLogo.jpg");
 		
 
-//		// The floor
+		// The floor
 		final Box floorBox = new Box("floor", new Vector3f(), roomSize, roomThick, roomFar);
 		room.attachChild(floorBox);
 		floorBox.getLocalTranslation().set(new Vector3f(0, -roomSize + distanceFromFloor, 0));
-//		color(floorBox, new ColorRGBA(102.0f / 255f, 51.0f / 255.0f , 0.0f, 1.0f));
 		applyTextures(floorBox, "models/concreteTexture.jpg");
 		
 
-//		// The roof
+		// The roof
 		final Box roofBox = new Box("roof", new Vector3f(), roomSize, roomThick, roomFar);
 		room.attachChild(roofBox);
 		roofBox.getLocalTranslation().set(new Vector3f(0, roomSize + distanceFromFloor, 0));
-//		color(roofBox, new ColorRGBA(102.0f / 255f, 51.0f / 255.0f , 0.0f, 1.0f));
 		applyTextures(roofBox, "models/roofTexture.jpg");
 		
-//		// The right wall
+		// The right wall
 		final Box rightWallBox = new Box("rightWall", new Vector3f(), roomThick, roomSize, roomFar);
 		room.attachChild(rightWallBox);
 		rightWallBox.getLocalTranslation().set(new Vector3f(roomSize, distanceFromFloor, 0));
-//		color(rightWallBox, new ColorRGBA(102.0f / 255f, 51.0f / 255.0f , 255.0f / 255.0f, 1.0f));
 		applyTextures(rightWallBox, "models/wallTexture.jpg");
 		
-//		// The left wall
+		// The left wall
 		final Box leftWallBox = new Box("leftWall", new Vector3f(), roomThick, roomSize, roomFar);
 		room.attachChild(leftWallBox);
 		leftWallBox.getLocalTranslation().set(new Vector3f(-roomSize, distanceFromFloor, 0));
-//		color(leftWallBox, new ColorRGBA(102.0f / 255f, 51.0f / 255.0f , 255.0f / 255.0f, 1.0f));
 		applyTextures(leftWallBox, "models/wallTexture.jpg");
 		
 		room.setModelBound(new BoundingBox());

@@ -4,5 +4,6 @@ public enum CameraOptions
 {
 	FreeStyleCamera,
 	SapoCamera,
-	CoinCamera
+	CoinCamera,
+	FollowCamera
 }
