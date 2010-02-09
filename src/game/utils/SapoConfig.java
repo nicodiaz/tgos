@@ -76,6 +76,8 @@ public class SapoConfig
 	private float backWallHeight;
 	@XStreamAlias("littleSapoScale")
 	private float littleSapoScale;
+	@XStreamAlias("pointsTextSize")
+	private float pointsTextSize;
 
 	private static SapoConfig instance = null;
 
@@ -289,6 +291,14 @@ public class SapoConfig
 	public float getLittleSapoScale()
 	{
 		return littleSapoScale;
+	}
+
+	/**
+	 * @return the pointsTextSize
+	 */
+	public float getPointsTextSize()
+	{
+		return pointsTextSize;
 	}
 
 }

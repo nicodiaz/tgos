@@ -26,6 +26,7 @@
 	<topLongLinesSeparation>5.4</topLongLinesSeparation>
 	<backWallHeight>3.0</backWallHeight>
 	<littleSapoScale>3.0</littleSapoScale>
+	<pointsTextSize>1.5</pointsTextSize>
 </scene>
 
 
