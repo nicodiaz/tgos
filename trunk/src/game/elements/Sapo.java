@@ -389,7 +389,7 @@ public class Sapo extends SapoElement
 	private void makeTransversalTop()
 	{
 		// Ths starting point is from the back
-		Vector3f transStartingPoint = new Vector3f(0, sapoHeight + topLineThick,
+		Vector3f transStartingPoint = new Vector3f(0, sapoHeight + 2* topLineThick,
 			-(sapoBack - topLineDeep));
 
 		// Last line
@@ -436,7 +436,7 @@ public class Sapo extends SapoElement
 	{
 		// Ths starting point is from the back
 		Vector3f longStartingPoint = new Vector3f(-(sapoWidth - topLineDeep), sapoHeight
-			+ topLineThick, -sapoZMid);
+			- 2 * topLineThick, -sapoZMid);
 
 		// first (left) line
 		final Box longTopLine1 = new Box("longTopLine1", new Vector3f(), topLineDeep, topLineThick,
@@ -482,9 +482,9 @@ public class Sapo extends SapoElement
 
 		// The upper front, that cover the left holes. This covers the boxes.
 		final Box frontTop = new Box("frontTop", new Vector3f(), sapoWidth, topLineThick,
-			2.0f * boxesLength);
+			1.7f * boxesLength);
 		frontTop.getLocalTranslation().set(
-			new Vector3f(0, (sapoHeight + topLineThick), -(sapoFront)));
+			new Vector3f(0, (sapoHeight + 2 * topLineThick), -(sapoFront - 0.4f * boxesLength)));
 		frontTop.setModelBound(new BoundingBox());
 		frontTop.updateModelBound();
 		sapoStaticNode.attachChild(frontTop);
@@ -493,7 +493,7 @@ public class Sapo extends SapoElement
 		final Box frontFront = new Box("frontFront", new Vector3f(), sapoWidth, 1.5f * boxesHigh,
 			boxesThick);
 		frontFront.getLocalTranslation().set(
-			new Vector3f(0, (sapoHeight - 1.5f * boxesHigh), -(sapoFront - 2.0f * boxesLength)));
+			new Vector3f(0, (sapoHeight - 1.5f * boxesHigh + topLineThick), -(sapoFront - 2.0f * boxesLength)));
 		frontFront.setModelBound(new BoundingBox());
 		frontFront.updateModelBound();
 		sapoStaticNode.attachChild(frontFront);
