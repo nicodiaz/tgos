@@ -3,6 +3,7 @@ package game.core;
 import game.elements.Coin;
 import game.elements.Room;
 import game.elements.Sapo;
+import game.sound.SapoSounds;
 import game.utils.CameraOptions;
 
 import java.util.Date;
@@ -40,6 +41,7 @@ public class TgosMain extends SimplePhysicsGame
 	// Global Elements
 	private Coin coin = null;
 	private Sapo sapo = null;
+	private SapoSounds sapoSounds = null;
 
 	// The text information.
 	private Text playerInfoText = null;
@@ -74,8 +76,15 @@ public class TgosMain extends SimplePhysicsGame
 
 		initActions();
 		makeTexts();
+		setupSounds();
 		Logger.getLogger("").log(Level.WARNING, "Juego cargado. Enjoy!");
 
+	}
+
+	private void setupSounds()
+	{
+		sapoSounds = new SapoSounds();
+		sapoSounds.play();
 	}
 
 	private void makeTexts()
@@ -149,6 +158,10 @@ public class TgosMain extends SimplePhysicsGame
 			KeyInput.KEY_3, InputHandler.AXIS_NONE, false);
 		input.addAction(new ResetCameraPositionAction(), InputHandler.DEVICE_KEYBOARD,
 			KeyInput.KEY_4, InputHandler.AXIS_NONE, false);
+		
+		// The music action
+		input.addAction(new PauseAndContinueMusicAction(), InputHandler.DEVICE_KEYBOARD,
+			KeyInput.KEY_M, InputHandler.AXIS_NONE, false);
 	}
 
 	private void showAxisRods()
@@ -514,5 +527,30 @@ public class TgosMain extends SimplePhysicsGame
 			cam.update();
 			cameraOption = CameraOptions.FreeStyleCamera;
 		}
+	}
+
+	private class PauseAndContinueMusicAction extends InputAction
+	{
+		
+		@Override
+		public void performAction(InputActionEvent evt)
+		{
+			
+			if (evt.getTriggerPressed())
+			{
+				if (sapoSounds.isPlaying())
+				{
+					System.out.println("retorno is playing papa");
+					sapoSounds.stop();
+				}
+				else
+				{
+					System.out.println("retorno NO is playing papa");
+					sapoSounds.play();
+				}
+			}
+			
+		}
+
 	}
 }

@@ -65,10 +65,16 @@ $ant release.all
 - anterior, a la biblioteca odejava-jni.jar indicamos como nativas 
 - "jmephysics/impl/ode/lib".
 
-1.8 Referencia al classpath con bibliotecas nativas de JBullet
+1.8 Referencia al classpath con bibliotecas nativas de JBullet y Jorbis
 
 - Igual que los dos pasos anteriores, pero agregando 
-- "jmephysics/impl/jbullet/lib/jbullet.jar".
+- "jmephysics/impl/jbullet/lib/jbullet.jar". 
 
+1.9 Referencias a las bibliotecas locales del proyecto.
+
+- Agregar las bibliotecsa encontradas en tgos/lib. Ellas son:
+- xpp3_min-VERSION.jar (parser del XML)
+- xpp3_min-VERSION.jar (parser de XML)
+- jorbis-VERSION.jar (sonido)
 
 
