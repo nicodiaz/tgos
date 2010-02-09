@@ -131,10 +131,17 @@ El framework utilizado para resolver la f\'isica y creaci\'on de la escena (rast
 \subsection{Modelado de la escena}
 
 El modelado de la escena constituye la parte central del trabajo. Gracias a la utilizaci\'on del framework, los aspectos de jugabilidad y f\'isica pueden resolverse con la ayuda de JMonkey, pero el modelado de la escena, es el mayor problema a enfrentar en el desarrollo de este juego. 
-Para ello, mediante las primitivas ofrecidas por el framework, se dise\~no el Sapo como lo har\'ia un carpintero: primero, las cajas exteriores, luego, las canaletas internas, la tapa y por ultimo detalles como el sapo decorativo. El trabajo en el dise\~no del mueble, casi art\'istico, se hizo mediante el seguimiento de los planos pensados con  anterioridad y consumi\'o la mayor parte del tiempo.
+Para ello, mediante las primitivas ofrecidas por el framework, se dise\~no el Sapo como lo har\'ia un carpintero: primero, las cajas exteriores, luego, las canaletas internas, la tapa y por ultimo detalles como el sapo decorativo. El trabajo en el dise\~no del mueble, casi art\'istico, se hizo mediante el seguimiento de los planos pensados con  anterioridad y consumi\'o la mayor parte del tiempo. El plano del corte de secci\'on utilizado en la diagramaci\'on del sapo se observa en la figura \ref{fig:sapoSection}.
 
 Para la construcci\'on de la escena, se utiliza un archivo XML conteniendo la informaci\'on y medidas de los elementos que la componen. De esta forma se logra una interface de f\'acil acceso y modificaci\'on si as\'i lo requiriere, sin la necesidad de compilar de nuevo la aplicaci\'on.
-% PONER FIGURAS DE PLANOS
+
+\begin{figure}[!ht]
+	\centering
+		\includegraphics[width=9cm,height=6.45cm]{img/sapoLayout.png}
+	\caption{Plano del corte de secci\'on.}
+	\label{fig:sapoSection}
+\end{figure}
+
 
 \subsection{Jugador}
 \label{impl:jugador}
