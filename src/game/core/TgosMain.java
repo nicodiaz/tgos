@@ -28,6 +28,7 @@ public class TgosMain extends SimplePhysicsGame
 	private Float initShootTime = 0.0f;
 	private Vector3f currentVelocity = new Vector3f();
 	private CameraOptions cameraOption = CameraOptions.FollowCamera;
+	private Vector3f cameraStartingPoint = new Vector3f(0, 20f, 5f);
 	private boolean deactivateMouseShooting = false;
 
 	// The players data. In the future, this can be a class.
@@ -79,10 +80,8 @@ public class TgosMain extends SimplePhysicsGame
 		setupSounds();
 		
 		// The starting point of the camera
-//		cam.getLocation().setY(20);
-		cam.setLocation(new Vector3f(0, 20f, 5f));
+		cam.setLocation(cameraStartingPoint);
 		cam.update();
-		
 		
 		Logger.getLogger("").log(Level.WARNING, "Juego cargado. Enjoy!");
 
